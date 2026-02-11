@@ -23,34 +23,36 @@ html, body {
         lmap.setView([1002, 997], 7);
 
         // creates the icon
-        var icon = L.icon({
-            iconUrl: 'marker.svg',
-            iconSize: [30, 30]
-        });
+        //var icon = L.icon({
+        //    iconUrl: 'marker.svg',
+        //    iconSize: [30, 30]
+        //});
 
         // creates the marker
-        L.marker([1002.3, 997.6], {
-            icon: icon
-        }).addTo(lmap)
-.bindPopup('<b>Mein Ziel</b><br><a href="https://maps.secondlife.com/secondlife/Region/1002/997/30" target="_blank">Teleport öffnen</a>');
+        //L.marker([1002.3, 997.6], {
+        //    icon: icon
+        //}).addTo(lmap)
+        //.bindPopup('<b>Mein Ziel</b><br><a href="https://maps.secondlife.com/secondlife/Region/1002/997/30" target="_blank">Teleport öffnen</a>');
 
-	fetch('stations.json')
-	  .then(response => response.json())
-          .then(stations => {
+	    fetch('stations.json')
+	        .then(response => response.json())
+            .then(stations => {
 
-    stations.forEach(station => {
+        stations.forEach(station => {
+            var icon = L.icon({
+                iconURL: "'" + station.marker  + "'"
+            })
+            var marker = L.marker(
+                [station.grid_pos[1], station.grid_pos[0]],
+                { icon: icon }
+            ).addTo(lmap);
 
-      var marker = L.marker(
-        [station.grid_pos[1], station.grid_pos[0]],
-        { icon: icon }
-      ).addTo(lmap);
+            marker.bindPopup(
+                "<b>" + station.name + "</b><br>" +
+                "<a href='" + station.url + "' target='_blank'>Teleport öffnen</a>"
+            );
 
-      marker.bindPopup(
-        "<b>" + station.name + "</b><br>" +
-        "<a href='" + station.url + "' target='_blank'>Teleport öffnen</a>"
-      );
-
-    });
+        });
 
   })
   .catch(err => console.error("Fehler beim Laden der stations.json:", err));
