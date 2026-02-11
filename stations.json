@@ -1,7 +1,7 @@
 [
   {
     "name": "Station Hikuelo - D1",
-    "url": "https://maps.secondlife.com/secondlife/Hikuelo/108/234/22",
+    "url": "secondlife://Hikuelo/108/234/22",
     "region": "Hikuelo",
     "marker": "station.png",
     "grid_pos": [
@@ -11,7 +11,7 @@
   },
   {
     "name": "Station Kania - D1",
-    "url": "https://maps.secondlife.com/secondlife/Kania/37/226/35",
+    "url": "secondlife://Kania/37/226/35",
     "region": "Kania",
     "marker": "station.png",
     "grid_pos": [
@@ -21,7 +21,7 @@
   },
   {
     "name": "Station Abbotts Field - main - D1",
-    "url": "https://maps.secondlife.com/secondlife/Abbotts/136/120/34",
+    "url": "secondlife://Abbotts/136/120/34",
     "region": "Abbotts",
     "marker": "station.png",
     "grid_pos": [
@@ -31,7 +31,7 @@
   },
   {
     "name": "Station Abbotts Field - small boat docks - D1",
-    "url": "https://maps.secondlife.com/secondlife/Abbotts/40/121/23",
+    "url": "secondlife://Abbotts/40/121/23",
     "region": "Abbotts",
     "marker": "station.png",
     "grid_pos": [
@@ -41,7 +41,7 @@
   },
   {
     "name": "Station Abbotts Field - large boat pier - D1",
-    "url": "https://maps.secondlife.com/secondlife/Abbotts/108/22/21",
+    "url": "secondlife://Abbotts/108/22/21",
     "region": "Abbotts",
     "marker": "station.png",
     "grid_pos": [
@@ -51,7 +51,7 @@
   },
   {
     "name": "Substation Bay City - D1",
-    "url": "https://maps.secondlife.com/secondlife/Bay%20City%20-%20Morton/243/111/25",
+    "url": "secondlife://Bay%20City%20-%20Morton/243/111/25",
     "region": "Bay City - Morton",
     "marker": "substation.png",
     "grid_pos": [
@@ -61,7 +61,7 @@
   },
   {
     "name": "Substation Hotei - D1",
-    "url": "https://maps.secondlife.com/secondlife/Hotei/160/236/23",
+    "url": "secondlife://Hotei/160/236/23",
     "region": "Hotei",
     "marker": "substation.png",
     "grid_pos": [
@@ -71,7 +71,7 @@
   },
   {
     "name": "Substation Tenjin - D1",
-    "url": "https://maps.secondlife.com/secondlife/Tenjin/157/212/27",
+    "url": "secondlife://Tenjin/157/212/27",
     "region": "Tenjin",
     "marker": "substation.png",
     "grid_pos": [
@@ -81,7 +81,7 @@
   },
   {
     "name": "Substation Gogebic - docks - D1",
-    "url": "https://maps.secondlife.com/secondlife/Gogebic/199/54/83",
+    "url": "secondlife://Gogebic/199/54/83",
     "region": "Gogebic",
     "marker": "substation.png",
     "grid_pos": [
@@ -91,7 +91,7 @@
   },
   {
     "name": "Substation Gogebic - airstrip - D1",
-    "url": "https://maps.secondlife.com/secondlife/Gogebic/141/229/107",
+    "url": "secondlife://Gogebic/141/229/107",
     "region": "Gogebic",
     "marker": "substation.png",
     "grid_pos": [
@@ -101,7 +101,7 @@
   },
   {
     "name": "Substation and Sail Center Annex Butler - D1",
-    "url": "https://maps.secondlife.com/secondlife/Butler/21/58/22",
+    "url": "secondlife://Butler/21/58/22",
     "region": "Butler",
     "marker": "substation.png",
     "grid_pos": [
@@ -111,7 +111,7 @@
   },
   {
     "name": "Substation Long Meg - D1",
-    "url": "https://maps.secondlife.com/secondlife/Long%20Meg/158/19/22",
+    "url": "secondlife://Long%20Meg/158/19/22",
     "region": "Long Meg",
     "marker": "substation.png",
     "grid_pos": [
@@ -121,7 +121,7 @@
   },
   {
     "name": "Radar Station Cranberry - main - D1",
-    "url": "https://maps.secondlife.com/secondlife/Cranberry/181/223/102",
+    "url": "secondlife://Cranberry/181/223/102",
     "region": "Cranberry",
     "marker": "radar_station.png",
     "grid_pos": [
@@ -131,7 +131,7 @@
   },
   {
     "name": "Radar Station Cranberry - docks - D1",
-    "url": "https://maps.secondlife.com/secondlife/Cranberry/217/213/81",
+    "url": "secondlife://Cranberry/217/213/81",
     "region": "Cranberry",
     "marker": "radar_station.png",
     "grid_pos": [
@@ -141,7 +141,7 @@
   },
   {
     "name": "Substation Anton - D1",
-    "url": "https://maps.secondlife.com/secondlife/Anton/147/34/103",
+    "url": "secondlife://Anton/147/34/103",
     "region": "Anton",
     "marker": "substation.png",
     "grid_pos": [
@@ -151,7 +151,7 @@
   },
   {
     "name": "Substation North Pole - D1",
-    "url": "https://maps.secondlife.com/secondlife/Virrat/13/132/99",
+    "url": "secondlife://Virrat/13/132/99",
     "region": "Virrat",
     "marker": "substation.png",
     "grid_pos": [
@@ -161,7 +161,7 @@
   },
   {
     "name": "Substation Shepard’s Point - D1",
-    "url": "https://maps.secondlife.com/secondlife/Scotopteryx/40/228/22",
+    "url": "secondlife://Scotopteryx/40/228/22",
     "region": "Scotopteryx",
     "marker": "substation.png",
     "grid_pos": [
@@ -171,7 +171,7 @@
   },
   {
     "name": "Substation Serendipity - D1",
-    "url": "https://maps.secondlife.com/secondlife/Eggar/200/43/24",
+    "url": "secondlife://Eggar/200/43/24",
     "region": "Eggar",
     "marker": "substation.png",
     "grid_pos": [
@@ -181,7 +181,7 @@
   },
   {
     "name": "Substation Consular - D1",
-    "url": "https://maps.secondlife.com/secondlife/Consular/216/51/22",
+    "url": "secondlife://Consular/216/51/22",
     "region": "Consular",
     "marker": "substation.png",
     "grid_pos": [
@@ -191,7 +191,7 @@
   },
   {
     "name": "Substation Crameri - D1",
-    "url": "https://maps.secondlife.com/secondlife/Crameri/219/192/21",
+    "url": "secondlife://Crameri/219/192/21",
     "region": "Crameri",
     "marker": "substation.png",
     "grid_pos": [
@@ -201,7 +201,7 @@
   },
   {
     "name": "Substation Promissa - D1",
-    "url": "https://maps.secondlife.com/secondlife/Promissa/174/201/22",
+    "url": "secondlife://Promissa/174/201/22",
     "region": "Promissa",
     "marker": "substation.png",
     "grid_pos": [
@@ -211,7 +211,7 @@
   },
   {
     "name": "Air Substation Daybreak - D1",
-    "url": "https://maps.secondlife.com/secondlife/Lyonet/46/224/106",
+    "url": "secondlife://Lyonet/46/224/106",
     "region": "Lyonet",
     "marker": "air_station.png",
     "grid_pos": [
@@ -221,7 +221,7 @@
   },
   {
     "name": "Substation Besma - D1",
-    "url": "https://maps.secondlife.com/secondlife/Besma/66/79/22",
+    "url": "secondlife://Besma/66/79/22",
     "region": "Besma",
     "marker": "substation.png",
     "grid_pos": [
@@ -231,7 +231,7 @@
   },
   {
     "name": "Ice Station Amundsen - D1",
-    "url": "https://maps.secondlife.com/secondlife/Nonantola/149/72/24",
+    "url": "secondlife://Nonantola/149/72/24",
     "region": "Nonantola",
     "marker": "snow_station.png",
     "grid_pos": [
@@ -241,7 +241,7 @@
   },
   {
     "name": "Mountain Rescue Outpost, D1 S7",
-    "url": "https://maps.secondlife.com/secondlife/Kendall/234/29/128",
+    "url": "secondlife://Kendall/234/29/128",
     "region": "Kendall",
     "marker": "snow_station.png",
     "grid_pos": [
@@ -251,7 +251,7 @@
   },
   {
     "name": "Supply Depot Bretton, D1 S7",
-    "url": "https://maps.secondlife.com/secondlife/Bretton/14/126/106",
+    "url": "secondlife://Bretton/14/126/106",
     "region": "Bretton",
     "marker": "snow_station.png",
     "grid_pos": [
@@ -261,7 +261,7 @@
   },
   {
     "name": "Polar Ops HQ, D1 S7",
-    "url": "https://maps.secondlife.com/secondlife/Bretton/51/53/107",
+    "url": "secondlife://Bretton/51/53/107",
     "region": "Bretton",
     "marker": "snow_station.png",
     "grid_pos": [
@@ -271,7 +271,7 @@
   },
   {
     "name": "Chapel, D1 S8",
-    "url": "https://maps.secondlife.com/secondlife/Abbotts/164/222/44",
+    "url": "secondlife://Abbotts/164/222/44",
     "region": "Abbotts",
     "marker": "church_station.png",
     "grid_pos": [
@@ -281,7 +281,7 @@
   },
   {
     "name": "Polar Ops K-9 Training Center, D1 S7 (road)",
-    "url": "https://maps.secondlife.com/secondlife/Braggiani/101/205/84",
+    "url": "secondlife://Braggiani/101/205/84",
     "region": "Braggiani",
     "marker": "k9_station.png",
     "grid_pos": [
@@ -291,7 +291,7 @@
   },
   {
     "name": "Polar Ops K-9 Training Center, D1 S7 (docks)",
-    "url": "https://maps.secondlife.com/secondlife/Braggiani/15/172/21",
+    "url": "secondlife://Braggiani/15/172/21",
     "region": "Braggiani",
     "marker": "k9_station.png",
     "grid_pos": [
@@ -301,7 +301,7 @@
   },
   {
     "name": "Station Sarcee - D2",
-    "url": "https://maps.secondlife.com/secondlife/Sarcee/239/218/23",
+    "url": "secondlife://Sarcee/239/218/23",
     "region": "Sarcee",
     "marker": "station.png",
     "grid_pos": [
@@ -311,7 +311,7 @@
   },
   {
     "name": "Station Promethium - D2",
-    "url": "https://maps.secondlife.com/secondlife/Promethium/138/55/25",
+    "url": "secondlife://Promethium/138/55/25",
     "region": "Promethium",
     "marker": "station.png",
     "grid_pos": [
@@ -321,7 +321,7 @@
   },
   {
     "name": "Station Promethium Hangar @ Port Scandium Airport - D2",
-    "url": "https://maps.secondlife.com/secondlife/Promethium/143/69/181",
+    "url": "secondlife://Promethium/143/69/181",
     "region": "Promethium",
     "marker": "air_station.png",
     "grid_pos": [
@@ -331,7 +331,7 @@
   },
   {
     "name": "South end of airstrip, 66 ASML - D2",
-    "url": "https://maps.secondlife.com/secondlife/Promethium/88/97/86",
+    "url": "secondlife://Promethium/88/97/86",
     "region": "Promethium",
     "marker": "air_station.png",
     "grid_pos": [
@@ -341,7 +341,7 @@
   },
   {
     "name": "Air Substation Exxilon - D2",
-    "url": "https://maps.secondlife.com/secondlife/Exxilon/132/235/43",
+    "url": "secondlife://Exxilon/132/235/43",
     "region": "Exxilon",
     "marker": "air_station.png",
     "grid_pos": [
@@ -351,7 +351,7 @@
   },
   {
     "name": "Air Substation Monowai - D2",
-    "url": "https://maps.secondlife.com/secondlife/Monowai/173/83/79",
+    "url": "secondlife://Monowai/173/83/79",
     "region": "Monowai",
     "marker": "air_station.png",
     "grid_pos": [
@@ -361,7 +361,7 @@
   },
   {
     "name": "Substation Kang Nae - D2",
-    "url": "https://maps.secondlife.com/secondlife/Kang%20Nae/58/224/22",
+    "url": "secondlife://Kang%20Nae/58/224/22",
     "region": "Kang Nae",
     "marker": "substation.png",
     "grid_pos": [
@@ -371,7 +371,7 @@
   },
   {
     "name": "Substation & Diver Center Solha - D2",
-    "url": "https://maps.secondlife.com/secondlife/Solha/99/211/22",
+    "url": "secondlife://Solha/99/211/22",
     "region": "Solha",
     "marker": "dive_station.png",
     "grid_pos": [
@@ -381,7 +381,7 @@
   },
   {
     "name": "Substation Ahnpyung - D2",
-    "url": "https://maps.secondlife.com/secondlife/Ahnpyung/2/126/22",
+    "url": "secondlife://Ahnpyung/2/126/22",
     "region": "Ahnpyung",
     "marker": "substation.png",
     "grid_pos": [
@@ -391,7 +391,7 @@
   },
   {
     "name": "Substation Yeosol - D2",
-    "url": "https://maps.secondlife.com/secondlife/Yeosol/146/243/22",
+    "url": "secondlife://Yeosol/146/243/22",
     "region": "Yeosol",
     "marker": "substation.png",
     "grid_pos": [
@@ -401,7 +401,7 @@
   },
   {
     "name": "Sail Center Annex Jingi - D2",
-    "url": "https://maps.secondlife.com/secondlife/Jingi/73/218/22",
+    "url": "secondlife://Jingi/73/218/22",
     "region": "Jingi",
     "marker": "sail_station.png",
     "grid_pos": [
@@ -411,9 +411,9 @@
   },
   {
     "name": "Station Munro & Noumea Airport - D2",
-    "url": "https://maps.secondlife.com/secondlife/Saddlemead/124/9/23",
+    "url": "secondlife://Saddlemead/124/9/23",
     "region": "Saddlemead",
-    "marker": "station.png",
+    "marker": "air_station.png",
     "grid_pos": [
       1020.484375,
       915.035156
@@ -421,7 +421,7 @@
   },
   {
     "name": "Station Munro Cemetary - D2",
-    "url": "https://maps.secondlife.com/secondlife/Saddlemead/111/36/702",
+    "url": "secondlife://Saddlemead/111/36/702",
     "region": "Saddlemead",
     "marker": "church_station.png",
     "grid_pos": [
@@ -431,7 +431,7 @@
   },
   {
     "name": "Station Byron Bay - D2",
-    "url": "https://maps.secondlife.com/secondlife/Svitjod/219/69/23",
+    "url": "secondlife://Svitjod/219/69/23",
     "region": "Svitjod",
     "marker": "station.png",
     "grid_pos": [
@@ -441,7 +441,7 @@
   },
   {
     "name": "Station Danshire - D2",
-    "url": "https://maps.secondlife.com/secondlife/Venrigalli/106/52/22",
+    "url": "secondlife://Venrigalli/106/52/22",
     "region": "Venrigalli",
     "marker": "station.png",
     "grid_pos": [
@@ -451,7 +451,7 @@
   },
   {
     "name": "Station New Horizons - D2",
-    "url": "https://maps.secondlife.com/secondlife/Alphubel/128/141/23",
+    "url": "secondlife://Alphubel/128/141/23",
     "region": "Alphubel",
     "marker": "station.png",
     "grid_pos": [
@@ -461,7 +461,7 @@
   },
   {
     "name": "Station Sta Catalina - D2",
-    "url": "https://maps.secondlife.com/secondlife/Hollywood/239/35/22",
+    "url": "secondlife://Hollywood/239/35/22",
     "region": "Hollywood",
     "marker": "station.png",
     "grid_pos": [
@@ -471,7 +471,7 @@
   },
   {
     "name": "Substation Qlar Fell - D3",
-    "url": "https://maps.secondlife.com/secondlife/Qlar%20Fell/158/218/22",
+    "url": "secondlife://Qlar%20Fell/158/218/22",
     "region": "Qlar Fell",
     "marker": "substation.png",
     "grid_pos": [
@@ -481,7 +481,7 @@
   },
   {
     "name": "Substation Quagmire - D3",
-    "url": "https://maps.secondlife.com/secondlife/Quagmire/105/168/23",
+    "url": "secondlife://Quagmire/105/168/23",
     "region": "Quagmire",
     "marker": "substation.png",
     "grid_pos": [
@@ -491,7 +491,7 @@
   },
   {
     "name": "Substation Agrippa - D3",
-    "url": "https://maps.secondlife.com/secondlife/Agrippa/219/242/22",
+    "url": "secondlife://Agrippa/219/242/22",
     "region": "Agrippa",
     "marker": "substation.png",
     "grid_pos": [
@@ -501,7 +501,7 @@
   },
   {
     "name": "Substation Vorlheim - D3",
-    "url": "https://maps.secondlife.com/secondlife/Vorlheim/241/9/22",
+    "url": "secondlife://Vorlheim/241/9/22",
     "region": "Vorlheim",
     "marker": "substation.png",
     "grid_pos": [
@@ -511,7 +511,7 @@
   },
   {
     "name": "Substation Remora - D3",
-    "url": "https://maps.secondlife.com/secondlife/Remora/88/228/22",
+    "url": "secondlife://Remora/88/228/22",
     "region": "Remora",
     "marker": "substation.png",
     "grid_pos": [
@@ -521,9 +521,9 @@
   },
   {
     "name": "Substation Starfish - Main/Airport ramp - D3",
-    "url": "https://maps.secondlife.com/secondlife/Hardrada/158/156/43",
+    "url": "secondlife://Hardrada/158/156/43",
     "region": "Hardrada",
-    "marker": "substation.png",
+    "marker": "air_station.png",
     "grid_pos": [
       1131.617188,
       1072.609375
@@ -531,7 +531,7 @@
   },
   {
     "name": "Substation Starfish - Lake Docks - D3",
-    "url": "https://maps.secondlife.com/secondlife/Hardrada/38/44/23",
+    "url": "secondlife://Hardrada/38/44/23",
     "region": "Hardrada",
     "marker": "substation.png",
     "grid_pos": [
@@ -541,7 +541,7 @@
   },
   {
     "name": "Substation Starfish - East Docks - D3",
-    "url": "https://maps.secondlife.com/secondlife/Hardrada/158/33/22",
+    "url": "secondlife://Hardrada/158/33/22",
     "region": "Hardrada",
     "marker": "substation.png",
     "grid_pos": [
@@ -551,7 +551,7 @@
   },
   {
     "name": "Substation Sailstice - D3",
-    "url": "https://maps.secondlife.com/secondlife/Erik/174/41/22",
+    "url": "secondlife://Erik/174/41/22",
     "region": "Erik",
     "marker": "substation.png",
     "grid_pos": [
@@ -561,7 +561,7 @@
   },
   {
     "name": "Substation Kuna - D3",
-    "url": "https://maps.secondlife.com/secondlife/Chomo/209/2/22",
+    "url": "secondlife://Chomo/209/2/22",
     "region": "Chomo",
     "marker": "substation.png",
     "grid_pos": [
@@ -571,7 +571,7 @@
   },
   {
     "name": "enter harbor here (Substation Kuna access) - D3",
-    "url": "https://maps.secondlife.com/secondlife/Kunapipi/114/5/25",
+    "url": "secondlife://Kunapipi/114/5/25",
     "region": "Kunapipi",
     "marker": "misc_station.png",
     "grid_pos": [
@@ -581,7 +581,7 @@
   },
   {
     "name": "Substation Imelza - D3",
-    "url": "https://maps.secondlife.com/secondlife/Imelza/224/21/22",
+    "url": "secondlife://Imelza/224/21/22",
     "region": "Imelza",
     "marker": "substation.png",
     "grid_pos": [
@@ -591,7 +591,7 @@
   },
   {
     "name": "Substation Egle - D3",
-    "url": "https://maps.secondlife.com/secondlife/Egle/185/48/22",
+    "url": "secondlife://Egle/185/48/22",
     "region": "Egle",
     "marker": "substation.png",
     "grid_pos": [
@@ -601,7 +601,7 @@
   },
   {
     "name": "Substation Sialimonus - D3",
-    "url": "https://maps.secondlife.com/secondlife/Sialimonus/42/83/24",
+    "url": "secondlife://Sialimonus/42/83/24",
     "region": "Sialimonus",
     "marker": "substation.png",
     "grid_pos": [
@@ -611,7 +611,7 @@
   },
   {
     "name": "Air Station Acknefar - D3",
-    "url": "https://maps.secondlife.com/secondlife/Acknefar/185/128/24",
+    "url": "secondlife://Acknefar/185/128/24",
     "region": "Acknefar",
     "marker": "air_station.png",
     "grid_pos": [
@@ -621,7 +621,7 @@
   },
   {
     "name": "Station Discovery - D4",
-    "url": "https://maps.secondlife.com/secondlife/Artsebarsky/29/196/23",
+    "url": "secondlife://Artsebarsky/29/196/23",
     "region": "Artsebarsky",
     "marker": "station.png",
     "grid_pos": [
@@ -631,7 +631,7 @@
   },
   {
     "name": "Station Mignon - D4",
-    "url": "https://maps.secondlife.com/secondlife/Tigger/90/191/22",
+    "url": "secondlife://Tigger/90/191/22",
     "region": "Tigger",
     "marker": "station.png",
     "grid_pos": [
@@ -641,7 +641,7 @@
   },
   {
     "name": "Station Terranova - D4",
-    "url": "https://maps.secondlife.com/secondlife/Norstrilia/26/237/22",
+    "url": "secondlife://Norstrilia/26/237/22",
     "region": "Norstrilia",
     "marker": "station.png",
     "grid_pos": [
@@ -651,7 +651,7 @@
   },
   {
     "name": "Substation Kolbeinsey - D4",
-    "url": "https://maps.secondlife.com/secondlife/Kolbeinsey/165/99/22",
+    "url": "secondlife://Kolbeinsey/165/99/22",
     "region": "Kolbeinsey",
     "marker": "substation.png",
     "grid_pos": [
@@ -661,7 +661,7 @@
   },
   {
     "name": "Substation Clearbrook - D4",
-    "url": "https://maps.secondlife.com/secondlife/Clearbrook/164/139/22",
+    "url": "secondlife://Clearbrook/164/139/22",
     "region": "Clearbrook",
     "marker": "substation.png",
     "grid_pos": [
@@ -671,7 +671,7 @@
   },
   {
     "name": "Substation Aydat - D4",
-    "url": "https://maps.secondlife.com/secondlife/Aydat/17/230/22",
+    "url": "secondlife://Aydat/17/230/22",
     "region": "Aydat",
     "marker": "substation.png",
     "grid_pos": [
@@ -681,7 +681,7 @@
   },
   {
     "name": "Substation Mordicub - D4",
-    "url": "https://maps.secondlife.com/secondlife/Mordicub/224/76/21",
+    "url": "secondlife://Mordicub/224/76/21",
     "region": "Mordicub",
     "marker": "substation.png",
     "grid_pos": [
@@ -691,7 +691,7 @@
   },
   {
     "name": "Substation Hyralios - D4",
-    "url": "https://maps.secondlife.com/secondlife/Hyralios/55/239/22",
+    "url": "secondlife://Hyralios/55/239/22",
     "region": "Hyralios",
     "marker": "substation.png",
     "grid_pos": [
@@ -701,7 +701,7 @@
   },
   {
     "name": "Substation Slice - D4",
-    "url": "https://maps.secondlife.com/secondlife/Danshire/157/65/22",
+    "url": "secondlife://Danshire/157/65/22",
     "region": "Danshire",
     "marker": "substation.png",
     "grid_pos": [
@@ -711,7 +711,7 @@
   },
   {
     "name": "Substation Sheershank - D4",
-    "url": "https://maps.secondlife.com/secondlife/Sheershank/204/234/22",
+    "url": "secondlife://Sheershank/204/234/22",
     "region": "Sheershank",
     "marker": "substation.png",
     "grid_pos": [
@@ -721,7 +721,7 @@
   },
   {
     "name": "Substation Sorbet - D4",
-    "url": "https://maps.secondlife.com/secondlife/Sorbet/209/19/22",
+    "url": "secondlife://Sorbet/209/19/22",
     "region": "Sorbet",
     "marker": "substation.png",
     "grid_pos": [
@@ -731,7 +731,7 @@
   },
   {
     "name": "Substation DanCan - D4",
-    "url": "https://maps.secondlife.com/secondlife/Apple%20Island/13/251/22",
+    "url": "secondlife://Apple%20Island/13/251/22",
     "region": "Apple Island",
     "marker": "substation.png",
     "grid_pos": [
@@ -741,7 +741,7 @@
   },
   {
     "name": "Substation Jennilee - D4",
-    "url": "https://maps.secondlife.com/secondlife/Jennilee/53/175/22",
+    "url": "secondlife://Jennilee/53/175/22",
     "region": "Jennilee",
     "marker": "substation.png",
     "grid_pos": [
@@ -751,7 +751,7 @@
   },
   {
     "name": "Substation Pilatus - D4",
-    "url": "https://maps.secondlife.com/secondlife/Pilatus/141/230/23",
+    "url": "secondlife://Pilatus/141/230/23",
     "region": "Pilatus",
     "marker": "substation.png",
     "grid_pos": [

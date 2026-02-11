@@ -1,69 +1,62 @@
 <!DOCTYPE html>
-<html><head>
+<html>
+<head>
     <meta charset="utf-8">
 
     <script src="https://maps.secondlife.com/_scripts/sl.mapapi2.js"></script>
     <link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
 
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
 
-html, body {
-    height: 100%;
-    margin: 0;
-}
-    div#map-container {
-        width: 100%;
-        height: 100%;
-    }
+        div#map-container {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 
     <script>
-    function loadmap() {
-        var lmap = new SLMap(document.getElementById('map-container'));
-        lmap.setView([1002, 997], 7);
+        function loadmap() {
+            var lmap = new SLMap(document.getElementById('map-container'));
+            lmap.setView([1002, 997], 3);
 
-        // creates the icon
-        //var icon = L.icon({
-        //    iconUrl: 'marker.svg',
-        //    iconSize: [30, 30]
-        //});
+            fetch('stations.json')
+                .then(response => response.json())
+                .then(stations => {
 
-        // creates the marker
-        //L.marker([1002.3, 997.6], {
-        //    icon: icon
-        //}).addTo(lmap)
-        //.bindPopup('<b>Mein Ziel</b><br><a href="https://maps.secondlife.com/secondlife/Region/1002/997/30" target="_blank">Teleport öffnen</a>');
+                    stations.forEach(station => {
+                        var icon = L.icon({
+                            iconUrl: "marker/" + station.marker,
+                            iconSize: [30, 40]
+                        });
 
-	    fetch('stations.json')
-	        .then(response => response.json())
-            .then(stations => {
+                        var marker = L.marker(
+                            [station.grid_pos[1], station.grid_pos[0]],
+                            { icon: icon }
+                        ).addTo(lmap);
 
-        stations.forEach(station => {
-            var icon = L.icon({
-                iconURL: station.marker
-            });
-            var marker = L.marker(
-                [station.grid_pos[1], station.grid_pos[0]],
-                { icon: icon }
-            ).addTo(lmap);
+                        marker.bindTooltip(station.name, {
+                            permanent: false,
+                            direction: "top"
+                        });
 
-            marker.bindPopup(
-                "<b>" + station.name + "</b><br>" +
-                "<a href='" + station.url + "' target='_blank'>Teleport öffnen</a>"
-            );
+                        marker.bindPopup(
+                            "<b>" + station.name + "</b><br>" +
+                            "<a href='" + station.url + "' target='_blank'>Teleport</a>"
+                        );
+                    });
 
-        });
-
-  })
-  .catch(err => console.error("Fehler beim Laden der stations.json:", err));
-
-
-    }
-
+                })
+                .catch(err => console.error("failed to load resources", err));
+        }
     </script>
+</head>
 
-</head><body onload="loadmap()">
-
+<body onload="loadmap()">
     <div id="map-container"></div>
+</body>
+</html>
 
-</body></html>
