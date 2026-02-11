@@ -1,0 +1,119 @@
+[
+  {
+    "name": "Station Sarcee: D2 S2",
+    "url": "http://maps.secondlife.com/secondlife/Sarcee/239/218/23",
+    "region": "Sarcee",
+    "grid_pos": [
+      1018.933594,
+      912.851562
+    ]
+  },
+  {
+    "name": "Station Promethium, D2 S9",
+    "url": "http://maps.secondlife.com/secondlife/Promethium/138/55/25",
+    "region": "Promethium",
+    "grid_pos": [
+      1028.539062,
+      980.214844
+    ]
+  },
+  {
+    "name": "Station Promethium Hangar @ Port Scandium Airport, D2 S9",
+    "url": "http://maps.secondlife.com/secondlife/Promethium/143/69/181",
+    "region": "Promethium",
+    "grid_pos": [
+      1028.558594,
+      980.269531
+    ]
+  },
+  {
+    "name": "South end of airstrip, 66 ASML",
+    "url": "http://maps.secondlife.com/secondlife/Promethium/88/97/86",
+    "region": "Promethium",
+    "grid_pos": [
+      1028.34375,
+      980.378906
+    ]
+  },
+  {
+    "name": "Air Substation Exxilon, D2 S1",
+    "url": "http://maps.secondlife.com/secondlife/Exxilon/132/235/43",
+    "region": "Exxilon",
+    "grid_pos": [
+      1011.515625,
+      902.917969
+    ]
+  },
+  {
+    "name": "Air Substation Monowai, D2 S1",
+    "url": "http://maps.secondlife.com/secondlife/Monowai/173/83/79",
+    "region": "Monowai",
+    "grid_pos": [
+      1016.675781,
+      906.324219
+    ]
+  },
+  {
+    "name": "Substation Kang Nae: D2 S2",
+    "url": "http://maps.secondlife.com/secondlife/Kang%20Nae/58/224/22",
+    "region": "Kang Nae",
+    "grid_pos": [
+      1023.226562,
+      916.875
+    ]
+  },
+  {
+    "name": "Substation & Diver Center Solha, D2 S5",
+    "url": "http://maps.secondlife.com/secondlife/Solha/99/211/22",
+    "region": "Solha",
+    "grid_pos": [
+      1036.386719,
+      938.824219
+    ]
+  },
+  {
+    "name": "Substation Ahnpyung, D2 S5",
+    "url": "http://maps.secondlife.com/secondlife/Ahnpyung/2/126/22",
+    "region": "Ahnpyung",
+    "grid_pos": [
+      1025.007812,
+      924.492188
+    ]
+  },
+  {
+    "name": "Substation Yeosol, D2 S5",
+    "url": "http://maps.secondlife.com/secondlife/Yeosol/146/243/22",
+    "region": "Yeosol",
+    "grid_pos": [
+      1033.570312,
+      922.949219
+    ]
+  },
+  {
+    "name": "Sail Center Annex Jingi, D2 S5",
+    "url": "http://maps.secondlife.com/secondlife/Jingi/73/218/22",
+    "region": "Jingi",
+    "grid_pos": [
+      1032.285156,
+      937.851562
+    ]
+  },
+  {
+    "name": "Station Munro & Noumea Airport, D2 S2",
+    "url": "http://maps.secondlife.com/secondlife/Saddlemead/124/9/23",
+    "region": "Saddlemead",
+    "grid_pos": [
+      1020.484375,
+      915.035156
+    ]
+  },
+  {
+    "name": "Station Munro Cemetary, D2 S2",
+    "url": "http://maps.secondlife.com/secondlife/Saddlemead/111/36/702",
+    "region": "Saddlemead",
+    "grid_pos": [
+      1020.433594,
+      915.140625
+    ]
+  }
+]
