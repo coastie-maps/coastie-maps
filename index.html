@@ -40,8 +40,8 @@ html, body {
 
         stations.forEach(station => {
             var icon = L.icon({
-                iconURL: "'" + station.marker  + "'"
-            })
+                iconURL: station.marker
+            });
             var marker = L.marker(
                 [station.grid_pos[1], station.grid_pos[0]],
                 { icon: icon }
