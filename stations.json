@@ -770,7 +770,7 @@
     ]
   },
   {
-    "name": "Flight Safety",
+    "name": "FSC Flight Safety",
     "url": "secondlife://Rossa/131/248/21",
     "region": "Rossa",
     "marker": "air_station.png",
@@ -780,7 +780,7 @@
     ]
   },
   {
-    "name": "Aircraft Training",
+    "name": "STC Aircraft Training",
     "url": "secondlife://Acknefar/153/22/24",
     "region": "Acknefar",
     "marker": "air_station.png",
@@ -790,7 +790,7 @@
     ]
   },
   {
-    "name": "Sail Training",
+    "name": "STC Sail Training",
     "url": "secondlife://Venrigalli/143/28/22",
     "region": "Venrigalli",
     "marker": "sail_station.png",
@@ -800,7 +800,7 @@
     ]
   },
   {
-    "name": "Boat Training & Museum",
+    "name": "BTC Boat Training & Museum",
     "url": "secondlife://Egle/162/110/25",
     "region": "Egle",
     "marker": "misc_station.png",
@@ -810,7 +810,7 @@
     ]
   },
   {
-    "name": "Dive Training",
+    "name": "DTC Dive Training",
     "url": "secondlife://Miller/207/189/82",
     "region": "Miller",
     "marker": "dive_station.png",
@@ -830,7 +830,7 @@
     ]
   },
   {
-    "name": "Medical Training",
+    "name": "MTC Medical Training",
     "url": "secondlife://Acknefar/156/54/24",
     "region": "Acknefar",
     "marker": "misc_station.png",
@@ -850,7 +850,7 @@
     ]
   },
   {
-    "name": "Recruit Training",
+    "name": "RTC Recruit Training",
     "url": "secondlife://Farcastle/151/167/22",
     "region": "Farcastle",
     "marker": "misc_station.png",
