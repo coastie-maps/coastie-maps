@@ -430,7 +430,7 @@
     ]
   },
   {
-    "name": "Station Byron Bay - D2",
+    "name": "Station Byron Bay - D3",
     "url": "secondlife://Svitjod/219/69/23",
     "region": "Svitjod",
     "marker": "station.png",
@@ -440,7 +440,7 @@
     ]
   },
   {
-    "name": "Station Danshire - D2",
+    "name": "Station Danshire - D3",
     "url": "secondlife://Venrigalli/106/52/22",
     "region": "Venrigalli",
     "marker": "station.png",
@@ -450,7 +450,7 @@
     ]
   },
   {
-    "name": "Station New Horizons - D2",
+    "name": "Station New Horizons - D3",
     "url": "secondlife://Alphubel/128/141/23",
     "region": "Alphubel",
     "marker": "station.png",
@@ -460,7 +460,7 @@
     ]
   },
   {
-    "name": "Station Sta Catalina - D2",
+    "name": "Station Sta Catalina - D3",
     "url": "secondlife://Hollywood/239/35/22",
     "region": "Hollywood",
     "marker": "station.png",
@@ -570,7 +570,7 @@
     ]
   },
   {
-    "name": "enter harbor here (Substation Kuna access) - D3",
+    "name": "Substation Kuna enter harbor here - D3",
     "url": "secondlife://Kunapipi/114/5/25",
     "region": "Kunapipi",
     "marker": "misc_station.png",
