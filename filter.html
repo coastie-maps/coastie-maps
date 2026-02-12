@@ -17,7 +17,6 @@
             height: 100%;
         }
 
-        /* Suchbox rechts oben */
         #search-container {
             position: absolute;
             z-index: 1000;
@@ -132,7 +131,7 @@
             var count = document.getElementById("resultCount");
 
             list.innerHTML = "";
-            count.textContent = markers.length + " Treffer";
+            count.textContent = markers.length + " Matches";
 
             markers.forEach(marker => {
                 var div = document.createElement("div");
@@ -153,7 +152,7 @@
 <body onload="loadmap()">
 
     <div id="search-container">
-        <input type="text" id="searchBox" placeholder="Station oder Region suchen...">
+        <input type="text" id="searchBox" placeholder="Search Station and Facilities...">
         <div id="resultCount"></div>
         <div id="resultList"></div>
     </div>
