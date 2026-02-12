@@ -93,7 +93,7 @@
     "name": "Substation Gogebic - airstrip - D1",
     "url": "secondlife://Gogebic/141/229/107",
     "region": "Gogebic",
-    "marker": "substation.png",
+    "marker": "air_station.png",
     "grid_pos": [
       1023.550781,
       991.894531
@@ -757,6 +757,206 @@
     "grid_pos": [
       1150.550781,
       1127.898438
+    ]
+  },
+  {
+    "name": "Acknefar",
+    "url": "secondlife://Acknefar/185/128/24",
+    "region": "Acknefar",
+    "marker": "air_station.png",
+    "grid_pos": [
+      1133.722656,
+      1063.5
+    ]
+  },
+  {
+    "name": "Flight Safety",
+    "url": "secondlife://Rossa/131/248/21",
+    "region": "Rossa",
+    "marker": "air_station.png",
+    "grid_pos": [
+      1007.511719,
+      990.96875
+    ]
+  },
+  {
+    "name": "Aircraft Training",
+    "url": "secondlife://Acknefar/153/22/24",
+    "region": "Acknefar",
+    "marker": "air_station.png",
+    "grid_pos": [
+      1133.597656,
+      1063.085938
+    ]
+  },
+  {
+    "name": "Sail Training",
+    "url": "secondlife://Venrigalli/143/28/22",
+    "region": "Venrigalli",
+    "marker": "sail_station.png",
+    "grid_pos": [
+      1124.558594,
+      1060.109375
+    ]
+  },
+  {
+    "name": "Boat Training & Museum",
+    "url": "secondlife://Egle/162/110/25",
+    "region": "Egle",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1100.632812,
+      1027.429688
+    ]
+  },
+  {
+    "name": "Dive Training",
+    "url": "secondlife://Miller/207/189/82",
+    "region": "Miller",
+    "marker": "dive_station.png",
+    "grid_pos": [
+      1018.808594,
+      987.738281
+    ]
+  },
+  {
+    "name": "Institute of Leadership",
+    "url": "secondlife://Alphubel/89/132/4002",
+    "region": "Alphubel",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1125.347656,
+      1045.515625
+    ]
+  },
+  {
+    "name": "Medical Training",
+    "url": "secondlife://Acknefar/156/54/24",
+    "region": "Acknefar",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1133.609375,
+      1063.210938
+    ]
+  },
+  {
+    "name": "LQP1 and Sea Deployment",
+    "url": "secondlife://Acknefar/214/31/31",
+    "region": "Acknefar",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1133.835938,
+      1063.121094
+    ]
+  },
+  {
+    "name": "Recruit Training",
+    "url": "secondlife://Farcastle/151/167/22",
+    "region": "Farcastle",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1110.589844,
+      1093.652344
+    ]
+  },
+  {
+    "name": "Search and Rescue",
+    "url": "secondlife://Acknefar/41/56/24",
+    "region": "Acknefar",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1133.160156,
+      1063.21875
+    ]
+  },
+  {
+    "name": "Honor Guard",
+    "url": "secondlife://Monowai/103/95/79",
+    "region": "Monowai",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1016.402344,
+      906.371094
+    ]
+  },
+  {
+    "name": "Headquarters",
+    "url": "secondlife://Alphubel/128/34/26",
+    "region": "Alphubel",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1125.5,
+      1045.132812
+    ]
+  },
+  {
+    "name": "Blackwell Media",
+    "url": "secondlife://The%20Kingdom/99/86/1254",
+    "region": "The Kingdom",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      779.386719,
+      1278.335938
+    ]
+  },
+  {
+    "name": "Graduation Plank FRC",
+    "url": "secondlife://Alphubel/83/183/23",
+    "region": "Alphubel",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1125.324219,
+      1045.714844
+    ]
+  },
+  {
+    "name": "Active Retired",
+    "url": "secondlife://Tenjin/157/194/28",
+    "region": "Tenjin",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1016.613281,
+      1005.757812
+    ]
+  },
+  {
+    "name": "Aircraft Maintanance",
+    "url": "secondlife://Acknefar/212/36/24",
+    "region": "Acknefar",
+    "marker": "air_station.png",
+    "grid_pos": [
+      1133.828125,
+      1063.140625
+    ]
+  },
+  {
+    "name": "Barracks Egle",
+    "url": "secondlife://Egle/197/153/22",
+    "region": "Egle",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1100.769531,
+      1027.597656
+    ]
+  },
+  {
+    "name": "Toasted Coastie Miller",
+    "url": "secondlife://Miller/147/148/83",
+    "region": "Miller",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1018.574219,
+      987.578125
+    ]
+  },
+  {
+    "name": "Radio Station",
+    "url": "secondlife://Abbotts/50/137/33",
+    "region": "Abbotts",
+    "marker": "misc_station.png",
+    "grid_pos": [
+      1000.195312,
+      997.535156
     ]
   }
 ]
