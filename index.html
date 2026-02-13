@@ -1,191 +1,286 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+<meta charset="utf-8">
 
-    <script src="https://maps.secondlife.com/_scripts/sl.mapapi2.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
+<script src="https://maps.secondlife.com/_scripts/sl.mapapi2.js"></script>
+<link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
 
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#map-container {
+    width: 100%;
+    height: 100%;
+}
+
+#search-container {
+    position: absolute;
+    z-index: 1000;
+    top: 10px;
+    right: 10px;
+    background: white;
+    padding: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    width: 260px;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+#searchBox {
+    width: 100%;
+    padding: 4px;
+    margin-bottom: 6px;
+    box-sizing: border-box;
+}
+
+#resultList {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.resultItem {
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+.resultItem:hover {
+    background: #eee;
+}
+
+/* Debugpunkte */
+.debug-point {
+    width: 10px;
+    height: 10px;
+    background: #ff0000;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+</style>
+
+<script>
+
+var allMarkers = [];
+var debugPoints = [];
+var debugPolygon = null;
+var lmap = null;
+
+const DEBUG_POLYGON_POINTS = false;
+
+var debugIcon = L.divIcon({
+    className: "debug-point",
+    iconSize: [10,10]
+});
+
+function loadmap() {
+
+    lmap = new SLMap(document.getElementById('map-container'));
+    lmap.setView([1002, 997], 3);
+
+    loadStations();
+    loadSectors();
+
+    // Klick auf Karte erzeugt Debugpunkt
+    lmap.on("click", function(e) {
+        if (DEBUG_POLYGON_POINTS) {
+            createDebugPoint(e.latlng);
         }
+    });
+}
 
-        #map-container {
-            width: 100%;
-            height: 100%;
-        }
+function loadStations() {
 
-        #search-container {
-            position: absolute;
-            z-index: 1000;
-            top: 10px;
-            right: 10px;
-            background: white;
-            padding: 8px;
-            border-radius: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            width: 260px;
-            font-family: sans-serif;
-            font-size: 14px;
-        }
+    fetch('stations.json')
+        .then(r => r.json())
+        .then(stations => {
 
-        #searchBox {
-            width: 100%;
-            padding: 4px;
-            margin-bottom: 6px;
-            box-sizing: border-box;
-        }
+            stations.forEach(station => {
 
-        #resultCount {
-            font-size: 12px;
-            color: #555;
-            margin-bottom: 4px;
-        }
+                var icon = L.icon({
+                    iconUrl: "marker/" + station.marker,
+                    iconSize: [30,40]
+                });
 
-        #resultList {
-            max-height: 200px;
-            overflow-y: auto;
-            border-top: 1px solid #ddd;
-            padding-top: 4px;
-        }
+                var marker = L.marker(
+                    [station.grid_pos[1], station.grid_pos[0]],
+                    { icon: icon }
+                ).addTo(lmap);
 
-        .resultItem {
-            cursor: pointer;
-            padding: 2px 0;
-        }
+                marker.stationData = station;
+                allMarkers.push(marker);
 
-        .resultItem:hover {
-            background: #f0f0f0;
-        }
-    </style>
+                marker.bindPopup(
+                    "<b>" + station.name + "</b><br>" +
+                    "<a href='" + station.url + "' target='_blank'>Teleport</a>"
+                );
 
-    <script>
-        var allMarkers = [];
-        var lmap = null;
-
-        function loadmap() {
-            lmap = new SLMap(document.getElementById('map-container'));
-            lmap.setView([1002, 997], 3);
-
-            fetch('stations.json')
-                .then(response => response.json())
-                .then(stations => {
-
-                    stations.forEach(station => {
-                        var icon = L.icon({
-                            iconUrl: "marker/" + station.marker,
-                            iconSize: [30, 40]
-                        });
-
-                        var marker = L.marker(
-                            [station.grid_pos[1], station.grid_pos[0]],
-                            { icon: icon }
-                        ).addTo(lmap);
-
-                        marker.stationData = station;
-                        allMarkers.push(marker);
-
-                        marker.bindTooltip(station.name, {
-                            permanent: false,
-                            direction: "top"
-                        });
-
-                        marker.bindPopup(
-                            "<b>" + station.name + "</b><br>" +
-                            "<a href='" + station.url + "' target='_blank'>Teleport</a>"
-                        );
-                    });
-
-                    document.getElementById("searchBox")
-                        .addEventListener("input", filterMarkers);
-
-                    updateResultList(allMarkers);
-                    loadSectors();
-
-                })
-                .catch(err => console.error("failed to load resources", err));
-        }
-
-        function loadSectors() {
-            fetch('sectors.json')
-                .then(response => response.json())
-                .then(sectors => {
-        
-                    sectors.forEach(sec => {
-        
-                        var latlngs = sec.coords.map(p => [p[1], p[0]]);
-        
-                        var polygon = L.polygon(latlngs, {
-                            color: sec.color,
-                            fillColor: sec.color,
-                            weight: 3,
-                            fillOpacity: 0.15
-                        }).addTo(lmap);
-        
-                        polygon.bindTooltip(
-                            "District " + sec.district + " - Sector " + sec.sector,
-                            { sticky: true }
-                        );
-                    });
-        
-                })
-                .catch(err => console.error("failed to load sectors", err));
-        }
-
-
-        function filterMarkers() {
-            var search = document.getElementById("searchBox").value.toLowerCase();
-            var visibleMarkers = [];
-
-            allMarkers.forEach(marker => {
-                var name = marker.stationData.name.toLowerCase();
-                var region = marker.stationData.region.toLowerCase();
-
-                if (name.includes(search) || region.includes(search)) {
-                    marker.addTo(lmap);
-                    visibleMarkers.push(marker);
-                } else {
-                    lmap.removeLayer(marker);
-                }
             });
 
-            updateResultList(visibleMarkers);
-        }
+            document.getElementById("searchBox")
+                .addEventListener("input", filterMarkers);
 
-        function updateResultList(markers) {
-            var list = document.getElementById("resultList");
-            var count = document.getElementById("resultCount");
+            updateResultList(allMarkers);
+        });
+}
 
-            list.innerHTML = "";
-            count.textContent = markers.length + " Matches";
+function loadSectors() {
 
-            markers.forEach(marker => {
-                var div = document.createElement("div");
-                div.className = "resultItem";
-                div.textContent = marker.stationData.name;
+    fetch('sectors.json')
+        .then(r => r.json())
+        .then(sectors => {
 
-                div.onclick = function() {
-                    lmap.setView(marker.getLatLng(), 6);
-                    marker.openPopup();
-                };
+            sectors.forEach(sec => {
 
-                list.appendChild(div);
+                var latlngs = sec.coords.map(p => [p[1], p[0]]);
+
+                L.polygon(latlngs, {
+                    color: sec.color,
+                    fillColor: sec.color,
+                    weight: 3,
+                    fillOpacity: 0
+                }).addTo(lmap);
+
             });
+        });
+}
+
+function filterMarkers() {
+
+    var search = document.getElementById("searchBox").value.toLowerCase();
+    var visible = [];
+
+    allMarkers.forEach(marker => {
+
+        var name = marker.stationData.name.toLowerCase();
+        var region = marker.stationData.region.toLowerCase();
+
+        if (name.includes(search) || region.includes(search)) {
+            marker.addTo(lmap);
+            visible.push(marker);
+        } else {
+            lmap.removeLayer(marker);
         }
-    </script>
+    });
+
+    updateResultList(visible);
+}
+
+function updateResultList(markers) {
+
+    var list = document.getElementById("resultList");
+    list.innerHTML = "";
+
+    markers.forEach(marker => {
+
+        var div = document.createElement("div");
+        div.className = "resultItem";
+        div.textContent = marker.stationData.name;
+
+        div.onclick = function() {
+            lmap.setView(marker.getLatLng(), 6);
+            marker.openPopup();
+        };
+
+        list.appendChild(div);
+    });
+}
+
+function createDebugPoint(latlng) {
+
+    var marker = L.marker(latlng, {
+        draggable: true,
+        icon: debugIcon
+    }).addTo(lmap);
+
+    marker.bindTooltip(
+        latlng.lng.toFixed(6) + " " + latlng.lat.toFixed(6),
+        { permanent:true }
+    );
+
+    marker.on("dragend", function() {
+
+        var pos = marker.getLatLng();
+
+        marker.setTooltipContent(
+            pos.lng.toFixed(6) + " " + pos.lat.toFixed(6)
+        );
+
+        updateDebugPolygon();
+    });
+
+    debugPoints.push(marker);
+    updateDebugPolygon();
+}
+
+function updateDebugPolygon() {
+
+    if (debugPolygon) {
+        lmap.removeLayer(debugPolygon);
+    }
+
+    if (debugPoints.length < 2) return;
+
+    var latlngs = debugPoints.map(m => m.getLatLng());
+
+    debugPolygon = L.polygon(latlngs, {
+        color:"#ff0000",
+        weight:2,
+        fillOpacity:0.05
+    }).addTo(lmap);
+}
+
+function removeLastDebugPoint() {
+
+    if (debugPoints.length === 0) return;
+
+    var marker = debugPoints.pop();
+    lmap.removeLayer(marker);
+    updateDebugPolygon();
+}
+
+function exportSectorPoints() {
+
+    console.log("---- sector points ----");
+
+    debugPoints.forEach(marker => {
+        var pos = marker.getLatLng();
+
+        console.log(
+            Math.round(pos.lng) + " " +
+            Math.round(pos.lat)
+        );
+    });
+
+    console.log("END");
+}
+
+
+document.addEventListener("keydown", function(e){
+
+    if (e.key === "e" || e.key === "E") {
+        exportSectorPoints();
+    }
+
+    if (e.key === "d" || e.key === "D") {
+        removeLastDebugPoint();
+    }
+});
+
+</script>
 </head>
 
 <body onload="loadmap()">
 
-    <div id="search-container">
-        <input type="text" id="searchBox" placeholder="Search Station and Facilities...">
-        <div id="resultCount"></div>
-        <div id="resultList"></div>
-    </div>
+<div id="search-container">
+    <input type="text" id="searchBox" placeholder="Search...">
+    <div id="resultList"></div>
+</div>
 
-    <div id="map-container"></div>
+<div id="map-container"></div>
 
 </body>
 </html>
