@@ -71,7 +71,6 @@ yellow
 1105 1072
 END
 
-
 3
 5
 yellow
