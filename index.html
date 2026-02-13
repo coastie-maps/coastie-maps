@@ -21,7 +21,8 @@ html, body {
     position: absolute;
     z-index: 1000;
     top: 10px;
-    right: 10px;
+    left: 80px;
+    right: auto;
     background: white;
     padding: 8px;
     border-radius: 6px;
@@ -41,6 +42,7 @@ html, body {
 #resultList {
     max-height: 200px;
     overflow-y: auto;
+    display: none; /* versteckt bis Text eingegeben */
 }
 
 .resultItem {
@@ -99,19 +101,17 @@ var debugIcon = L.divIcon({
 function loadmap() {
 
     lmap = new SLMap(document.getElementById('map-container'));
-    lmap.setView([1002, 997], 3);
+    lmap.setView([1012,1076], 2);
 
     loadStations();
     loadSectors();
 
-    // Klick auf Karte erzeugt Debugpunkt
     lmap.on("click", function(e) {
         if (DEBUG_POLYGON_POINTS) {
             createDebugPoint(e.latlng);
         }
     });
 
-    // Update label visibility when zoom changes
     lmap.on("zoomend", function() {
         updateLabelVisibility();
     });
@@ -158,7 +158,6 @@ function loadSectors() {
         .then(r => r.json())
         .then(sectors => {
 
-            // reset labels if reloading
             labelMarkers.forEach(m => {
                 if (lmap && lmap.removeLayer) lmap.removeLayer(m);
             });
@@ -175,7 +174,6 @@ function loadSectors() {
                     fillOpacity: 0
                 }).addTo(lmap);
 
-                // LABELS
                 if (sec.labels) {
                     sec.labels.forEach(lbl => {
 
@@ -193,7 +191,6 @@ function loadSectors() {
                             }
                         );
 
-                        // Position nach Verschieben ausgeben
                         labelMarker.on("dragend", function(e) {
                             var pos = e.target.getLatLng();
                             console.log(
@@ -210,7 +207,6 @@ function loadSectors() {
 
             });
 
-            // apply initial visibility based on current zoom
             updateLabelVisibility();
         });
 }
@@ -222,7 +218,6 @@ function updateLabelVisibility() {
     var shouldShow = z >= LABEL_MIN_ZOOM;
 
     labelMarkers.forEach(m => {
-        // lmap.hasLayer exists on Leaflet maps; SLMap should support it
         var onMap = (typeof lmap.hasLayer === "function") ? lmap.hasLayer(m) : false;
 
         if (shouldShow && !onMap) {
@@ -257,7 +252,16 @@ function filterMarkers() {
 function updateResultList(markers) {
 
     var list = document.getElementById("resultList");
+    var search = document.getElementById("searchBox").value.trim();
+
     list.innerHTML = "";
+
+    if (search.length === 0) {
+        list.style.display = "none";
+        return;
+    }
+
+    list.style.display = "block";
 
     markers.forEach(marker => {
 
@@ -343,7 +347,14 @@ function exportSectorPoints() {
     console.log("END");
 }
 
+/* ESC schließt Ergebnisliste */
 document.addEventListener("keydown", function(e){
+
+    if (e.key === "Escape") {
+        document.getElementById("searchBox").value = "";
+        document.getElementById("resultList").style.display = "none";
+        filterMarkers();
+    }
 
     if (e.key === "e" || e.key === "E") {
         exportSectorPoints();
