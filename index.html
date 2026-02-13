@@ -7,249 +7,283 @@
 <link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
 
 <style>
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-#map-container {
-    width: 100%;
-    height: 100%;
-}
+html, body { height:100%; margin:0; }
+#map-container { width:100%; height:100%; }
 
 #search-container {
-    position: absolute;
-    z-index: 1000;
-    top: 10px;
-    left: 80px;
-    right: auto;
-    background: white;
-    padding: 8px;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    width: 260px;
-    font-family: sans-serif;
-    font-size: 14px;
+    position:absolute;
+    z-index:1000;
+    top:10px;
+    left:80px;
+    background:white;
+    padding:8px;
+    border-radius:6px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    width:260px;
+    font-family:sans-serif;
+    font-size:14px;
 }
 
 #searchBox {
-    width: 100%;
-    padding: 4px;
-    margin-bottom: 6px;
-    box-sizing: border-box;
+    width:100%;
+    padding:4px;
+    margin-bottom:6px;
+    box-sizing:border-box;
 }
 
 #resultList {
-    max-height: 200px;
-    overflow-y: auto;
-    display: none; /* versteckt bis Text eingegeben */
+    max-height:200px;
+    overflow-y:auto;
+    display:none;
 }
 
-.resultItem {
-    cursor: pointer;
-    padding: 2px 0;
-}
+.resultItem { cursor:pointer; padding:2px 0; }
+.resultItem:hover { background:#eee; }
 
-.resultItem:hover {
-    background: #eee;
-}
-
-/* Debugpunkte */
 .debug-point {
-    width: 10px;
-    height: 10px;
-    background: #ff0000;
-    border: 2px solid white;
-    border-radius: 50%;
+    width:10px;
+    height:10px;
+    background:#ff0000;
+    border:2px solid white;
+    border-radius:50%;
 }
 
-/* Größere Sector Labels */
-.sector-label {
-    font-size: 28px;
-    font-weight: bold;
-    color: yellow;
+.sector_label {
+    font-size:28px;
+    font-weight:bold;
+    color:yellow;
     text-shadow:
         -2px -2px 0 black,
          2px -2px 0 black,
         -2px  2px 0 black,
          2px  2px 0 black;
-    white-space: nowrap;
+    white-space:nowrap;
+}
+
+#floatplanner-output {
+    position:absolute;
+    bottom:10px;
+    left:10px;
+    z-index:1000;
+    background:rgba(0,0,0,0.7);
+    color:#0f0;
+    padding:6px 10px;
+    font-family:monospace;
+    border-radius:6px;
 }
 </style>
 
 <script>
 
-var allMarkers = [];
-var debugPoints = [];
-var debugPolygon = null;
+var all_markers = [];
 var lmap = null;
 
-// Label markers for zoom-based visibility
-var labelMarkers = [];
+var debug_points = [];
+var float_line = null;
 
-// Debug / editor mode
-const DEBUG_POLYGON_POINTS = false;
+var floatplanner_layer = L.layerGroup();
+var floatplanner_active = false;
 
-// Show labels only at/above this zoom level
-const LABEL_MIN_ZOOM = 2;
+var district_layers = {};
+var layer_control = null;
 
-var debugIcon = L.divIcon({
-    className: "debug-point",
-    iconSize: [10,10]
+var label_markers = [];   // NEW
+
+const floatplanner_show_grid = true;
+const floatplanner_step_pixels = 10;
+const label_min_zoom = 4; // NEW
+
+var debug_icon = L.divIcon({
+    className:"debug-point",
+    iconSize:[10,10]
 });
 
 function loadmap() {
 
     lmap = new SLMap(document.getElementById('map-container'));
-    lmap.setView([1012,1076], 2);
+    lmap.setView([1012,1076],2);
 
-    loadStations();
-    loadSectors();
+    load_stations();
+    load_sectors();
 
-    lmap.on("click", function(e) {
-        if (DEBUG_POLYGON_POINTS) {
-            createDebugPoint(e.latlng);
+    lmap.on("click", function(e){
+        if(floatplanner_active){
+            create_debug_point(e.latlng);
         }
     });
 
-    lmap.on("zoomend", function() {
-        updateLabelVisibility();
+    lmap.on("zoomend", update_label_visibility); // NEW
+
+    document.getElementById("searchBox")
+        .addEventListener("input", filter_markers);
+
+    layer_control = L.control.layers(
+        null,
+        { "Floatplanner": floatplanner_layer }
+    ).addTo(lmap);
+
+    lmap.on('overlayadd', function(e){
+        if(e.layer === floatplanner_layer){
+            floatplanner_active = true;
+        }
+    });
+
+    lmap.on('overlayremove', function(e){
+        if(e.layer === floatplanner_layer){
+            floatplanner_active = false;
+            reset_floatplanner();
+        }
     });
 }
 
-function loadStations() {
+function update_label_visibility(){   // NEW
+    var zoom = lmap.getZoom();
+    var show = zoom >= label_min_zoom;
 
+    label_markers.forEach(m=>{
+        if(show){
+            if(!lmap.hasLayer(m)) m.addTo(lmap);
+        } else {
+            if(lmap.hasLayer(m)) lmap.removeLayer(m);
+        }
+    });
+}
+
+function reset_floatplanner(){
+    debug_points.forEach(m => floatplanner_layer.removeLayer(m));
+    debug_points = [];
+
+    if(float_line){
+        floatplanner_layer.removeLayer(float_line);
+        float_line = null;
+    }
+
+    document.getElementById("floatplanner-output").textContent = "";
+}
+
+function load_stations(){
     fetch('stations.json')
-        .then(r => r.json())
-        .then(stations => {
-
-            stations.forEach(station => {
-
-                var icon = L.icon({
-                    iconUrl: "marker/" + station.marker,
-                    iconSize: [30,40]
+        .then(r=>r.json())
+        .then(stations=>{
+            stations.forEach(station=>{
+                var icon=L.icon({
+                    iconUrl:"marker/"+station.marker,
+                    iconSize:[30,40]
                 });
 
-                var marker = L.marker(
-                    [station.grid_pos[1], station.grid_pos[0]],
-                    { icon: icon }
+                var marker=L.marker(
+                    [station.grid_pos[1],station.grid_pos[0]],
+                    {icon:icon}
                 ).addTo(lmap);
 
-                marker.stationData = station;
-                allMarkers.push(marker);
-
-                marker.bindPopup(
-                    "<b>" + station.name + "</b><br>" +
-                    "<a href='" + station.url + "' target='_blank'>Teleport</a>"
+                marker.stationData=station;
+                marker.bindTooltip(
+                    station.name,
+                    {
+                        direction: "top",
+                        offset: [0, -10]
+                    }
                 );
+                all_markers.push(marker);
 
+                if (station.url) {
+                    marker.bindPopup(
+                        "<b>" + station.name + "</b><br>" +
+                        "<a href='" + station.url + "' target='_blank'>Teleport</a>"
+                    );
+                }
             });
 
-            document.getElementById("searchBox")
-                .addEventListener("input", filterMarkers);
-
-            updateResultList(allMarkers);
+            update_result_list(all_markers);
         });
 }
 
-function loadSectors() {
+function load_sectors(){
 
     fetch('sectors.json')
-        .then(r => r.json())
-        .then(sectors => {
+        .then(r=>r.json())
+        .then(sectors=>{
 
-            labelMarkers.forEach(m => {
-                if (lmap && lmap.removeLayer) lmap.removeLayer(m);
-            });
-            labelMarkers = [];
+            district_layers = {};
+            label_markers = [];
 
-            sectors.forEach(sec => {
+            sectors.forEach(sec=>{
 
-                var latlngs = sec.coords.map(p => [p[1], p[0]]);
+                if(!district_layers[sec.district]){
+                    district_layers[sec.district] = L.layerGroup().addTo(lmap);
+                }
 
-                L.polygon(latlngs, {
-                    color: sec.color,
-                    fillColor: sec.color,
-                    weight: 3,
-                    fillOpacity: 0
-                }).addTo(lmap);
+                var layer = district_layers[sec.district];
 
-                if (sec.labels) {
-                    sec.labels.forEach(lbl => {
+                var latlngs = sec.coords.map(p=>[p[1],p[0]]);
+                var polygon = L.polygon(latlngs,{
+                    color:sec.color,
+                    weight:3,
+                    fillOpacity:0
+                });
 
-                        var labelIcon = L.divIcon({
-                            className: "sector-label",
-                            html: lbl.text,
-                            iconSize: [0,0]
+                layer.addLayer(polygon);
+
+                if(sec.labels){
+                    sec.labels.forEach(lbl=>{
+
+                        var label_icon = L.divIcon({
+                            className:"sector_label",
+                            html:lbl.text,
+                            iconSize:[0,0]
                         });
 
-                        var labelMarker = L.marker(
+                        var label_marker = L.marker(
                             [lbl.pos[1], lbl.pos[0]],
-                            {
-                                icon: labelIcon,
-                                draggable: DEBUG_POLYGON_POINTS
-                            }
+                            { icon:label_icon, draggable:floatplanner_active }
                         );
 
-                        labelMarker.on("dragend", function(e) {
-                            var pos = e.target.getLatLng();
-                            console.log(
-                                "label_position:",
-                                Math.round(pos.lng),
-                                Math.round(pos.lat),
-                                lbl.text
-                            );
-                        });
-
-                        labelMarkers.push(labelMarker);
+                        layer.addLayer(label_marker);
+                        label_markers.push(label_marker); // NEW
                     });
                 }
 
             });
 
-            updateLabelVisibility();
+            if(layer_control) layer_control.remove();
+
+            var overlays = {};
+            for(var d in district_layers){
+                overlays["District " + d] = district_layers[d];
+            }
+
+            overlays["Floatplanner"] = floatplanner_layer;
+
+            layer_control = L.control.layers(null, overlays).addTo(lmap);
+
+            update_label_visibility(); // NEW
         });
 }
 
-function updateLabelVisibility() {
-    if (!lmap || !labelMarkers) return;
+/* search */
 
-    var z = (typeof lmap.getZoom === "function") ? lmap.getZoom() : 0;
-    var shouldShow = z >= LABEL_MIN_ZOOM;
+function filter_markers(){
 
-    labelMarkers.forEach(m => {
-        var onMap = (typeof lmap.hasLayer === "function") ? lmap.hasLayer(m) : false;
-
-        if (shouldShow && !onMap) {
-            m.addTo(lmap);
-        } else if (!shouldShow && onMap) {
-            lmap.removeLayer(m);
-        }
-    });
-}
-
-function filterMarkers() {
-
-    var search = document.getElementById("searchBox").value.toLowerCase();
+    var search = document.getElementById("searchBox").value.toLowerCase().trim();
     var visible = [];
 
-    allMarkers.forEach(marker => {
+    all_markers.forEach(marker => {
 
-        var name = marker.stationData.name.toLowerCase();
-        var region = marker.stationData.region.toLowerCase();
+        var name = (marker.stationData.name || "").toLowerCase();
+        var region = (marker.stationData.region || "").toLowerCase();
 
-        if (name.includes(search) || region.includes(search)) {
-            marker.addTo(lmap);
+        if (search.length === 0 || name.includes(search) || region.includes(search)) {
+            if (!lmap.hasLayer(marker)) marker.addTo(lmap);
             visible.push(marker);
         } else {
-            lmap.removeLayer(marker);
+            if (lmap.hasLayer(marker)) lmap.removeLayer(marker);
         }
     });
 
-    updateResultList(visible);
+    update_result_list(visible);
 }
 
-function updateResultList(markers) {
+function update_result_list(markers){
 
     var list = document.getElementById("resultList");
     var search = document.getElementById("searchBox").value.trim();
@@ -269,99 +303,145 @@ function updateResultList(markers) {
         div.className = "resultItem";
         div.textContent = marker.stationData.name;
 
-        div.onclick = function() {
+        div.onclick = function(){
             lmap.setView(marker.getLatLng(), 6);
-            marker.openPopup();
+            if (marker.getPopup && marker.getPopup()) marker.openPopup();
         };
 
         list.appendChild(div);
     });
 }
 
-function createDebugPoint(latlng) {
+/* floatplanner */
 
-    var marker = L.marker(latlng, {
-        draggable: true,
-        icon: debugIcon
-    }).addTo(lmap);
+function create_debug_point(latlng){
 
-    marker.bindTooltip(
-        latlng.lng.toFixed(6) + " " + latlng.lat.toFixed(6),
-        { permanent:true }
-    );
+    var marker=L.marker(latlng,{
+        draggable:true,
+        icon:debug_icon
+    }).addTo(floatplanner_layer);
 
-    marker.on("dragend", function() {
-
-        var pos = marker.getLatLng();
-
-        marker.setTooltipContent(
-            pos.lng.toFixed(6) + " " + pos.lat.toFixed(6)
+    if(floatplanner_show_grid){
+        marker.bindTooltip(
+            Math.round(latlng.lng)+" "+Math.round(latlng.lat),
+            {permanent:true}
         );
-
-        updateDebugPolygon();
-    });
-
-    debugPoints.push(marker);
-    updateDebugPolygon();
-}
-
-function updateDebugPolygon() {
-
-    if (debugPolygon) {
-        lmap.removeLayer(debugPolygon);
     }
 
-    if (debugPoints.length < 2) return;
+    marker.on("dragend",update_float_line);
 
-    var latlngs = debugPoints.map(m => m.getLatLng());
+    debug_points.push(marker);
+    update_float_line();
+}
 
-    debugPolygon = L.polygon(latlngs, {
+function update_float_line(){
+
+    if(float_line){
+        floatplanner_layer.removeLayer(float_line);
+    }
+
+    if(debug_points.length<2) {
+        document.getElementById("floatplanner-output").textContent = "";
+        return;
+    }
+
+    var latlngs=debug_points.map(m=>m.getLatLng());
+
+    float_line=L.polyline(latlngs,{
         color:"#ff0000",
-        weight:2,
-        fillOpacity:0.05
-    }).addTo(lmap);
+        weight:2
+    }).addTo(floatplanner_layer);
+
+    compute_float_string(latlngs);
 }
 
-function removeLastDebugPoint() {
+function format_direction_string(str) {
 
-    if (debugPoints.length === 0) return;
+    if (!str || str.length === 0) return "";
 
-    var marker = debugPoints.pop();
-    lmap.removeLayer(marker);
-    updateDebugPolygon();
+    let result = [];
+    let current = str[0];
+    let count = 1;
+
+    for (let i = 1; i < str.length; i++) {
+        if (str[i] === current) {
+            count++;
+        } else {
+            result.push(count + current);
+            current = str[i];
+            count = 1;
+        }
+    }
+
+    result.push(count + current);
+    return result.join(" ");
 }
 
-function exportSectorPoints() {
+function compute_float_string(latlngs){
 
-    console.log("---- sector points ----");
+    let result="";
+    let prev_corner=null;
 
-    debugPoints.forEach(marker => {
-        var pos = marker.getLatLng();
+    for(let i=0;i<latlngs.length-1;i++){
 
-        console.log(
-            Math.round(pos.lng) + " " +
-            Math.round(pos.lat)
-        );
-    });
+        let a=lmap.latLngToContainerPoint(latlngs[i]);
+        let b=lmap.latLngToContainerPoint(latlngs[i+1]);
 
-    console.log("END");
+        let dist=a.distanceTo(b);
+        let steps=Math.floor(dist/floatplanner_step_pixels);
+        if (steps <= 0) continue;
+
+        for(let s=0;s<=steps;s++){
+
+            let t=s/steps;
+            let px=a.x+(b.x-a.x)*t;
+            let py=a.y+(b.y-a.y)*t;
+
+            let ll=lmap.containerPointToLatLng([px,py]);
+
+            let corner=[
+                Math.floor(ll.lng),
+                Math.floor(ll.lat)
+            ];
+
+            if(!prev_corner){
+                prev_corner=corner;
+                continue;
+            }
+
+            if(corner[0]===prev_corner[0] && corner[1]===prev_corner[1]){
+                continue;
+            }
+
+            let dx=corner[0]-prev_corner[0];
+            let dy=corner[1]-prev_corner[1];
+
+            if(dy>0) result+="N";
+            else if(dy<0) result+="S";
+            else if(dx>0) result+="E";
+            else if(dx<0) result+="W";
+
+            prev_corner=corner;
+        }
+    }
+
+    let formatted = format_direction_string(result);
+    document.getElementById("floatplanner-output").textContent = formatted;
 }
 
-/* ESC schließt Ergebnisliste */
-document.addEventListener("keydown", function(e){
+document.addEventListener("keydown",function(e){
 
-    if (e.key === "Escape") {
+    if(e.key==="Escape"){
         document.getElementById("searchBox").value = "";
         document.getElementById("resultList").style.display = "none";
-        filterMarkers();
+        filter_markers();
     }
 
-    if (e.key === "e" || e.key === "E") {
-        exportSectorPoints();
-    }
-
-    if (e.key === "d" || e.key === "D") {
-        removeLastDebugPoint();
+    if(e.key==="d"||e.key==="D"){
+        if(debug_points.length===0)return;
+        let m=debug_points.pop();
+        floatplanner_layer.removeLayer(m);
+        update_float_line();
     }
 });
 
@@ -375,8 +455,9 @@ document.addEventListener("keydown", function(e){
     <div id="resultList"></div>
 </div>
 
+<div id="floatplanner-output"></div>
+
 <div id="map-container"></div>
 
 </body>
 </html>
-
