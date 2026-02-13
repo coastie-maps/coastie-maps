@@ -60,6 +60,19 @@ html, body {
     border: 2px solid white;
     border-radius: 50%;
 }
+
+/* Sector label */
+.sector-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: yellow;
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    white-space: nowrap;
+}
 </style>
 
 <script>
@@ -84,7 +97,6 @@ function loadmap() {
     loadStations();
     loadSectors();
 
-    // Klick auf Karte erzeugt Debugpunkt
     lmap.on("click", function(e) {
         if (DEBUG_POLYGON_POINTS) {
             createDebugPoint(e.latlng);
@@ -143,6 +155,24 @@ function loadSectors() {
                     weight: 3,
                     fillOpacity: 0
                 }).addTo(lmap);
+
+                // LABELS
+                if (sec.labels) {
+                    sec.labels.forEach(lbl => {
+
+                        var labelIcon = L.divIcon({
+                            className: "sector-label",
+                            html: lbl.text,
+                            iconSize: [0,0]
+                        });
+
+                        L.marker(
+                            [lbl.pos[1], lbl.pos[0]],
+                            { icon: labelIcon }
+                        ).addTo(lmap);
+
+                    });
+                }
 
             });
         });
@@ -257,7 +287,6 @@ function exportSectorPoints() {
 
     console.log("END");
 }
-
 
 document.addEventListener("keydown", function(e){
 
