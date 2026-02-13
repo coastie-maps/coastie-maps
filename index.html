@@ -61,16 +61,16 @@ html, body {
     border-radius: 50%;
 }
 
-/* Sector label */
+/* Größere Sector Labels */
 .sector-label {
-    font-size: 16px;
+    font-size: 28px;
     font-weight: bold;
     color: yellow;
     text-shadow:
-        -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
+        -2px -2px 0 black,
+         2px -2px 0 black,
+        -2px  2px 0 black,
+         2px  2px 0 black;
     white-space: nowrap;
 }
 </style>
@@ -166,10 +166,24 @@ function loadSectors() {
                             iconSize: [0,0]
                         });
 
-                        L.marker(
+                        var labelMarker = L.marker(
                             [lbl.pos[1], lbl.pos[0]],
-                            { icon: labelIcon }
+                            {
+                                icon: labelIcon,
+                                draggable: DEBUG_POLYGON_POINTS
+                            }
                         ).addTo(lmap);
+
+                        // Position nach Verschieben ausgeben
+                        labelMarker.on("dragend", function(e) {
+                            var pos = e.target.getLatLng();
+                            console.log(
+                                "label_position:",
+                                Math.round(pos.lng),
+                                Math.round(pos.lat),
+                                lbl.text
+                            );
+                        });
 
                     });
                 }
