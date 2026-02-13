@@ -1,463 +1,570 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
+    <meta charset="utf-8">
 
-<script src="https://maps.secondlife.com/_scripts/sl.mapapi2.js"></script>
-<link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
+    <script src="https://maps.secondlife.com/_scripts/sl.mapapi2.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
 
-<style>
-html, body { height:100%; margin:0; }
-#map-container { width:100%; height:100%; }
-
-#search-container {
-    position:absolute;
-    z-index:1000;
-    top:10px;
-    left:80px;
-    background:white;
-    padding:8px;
-    border-radius:6px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.3);
-    width:260px;
-    font-family:sans-serif;
-    font-size:14px;
-}
-
-#searchBox {
-    width:100%;
-    padding:4px;
-    margin-bottom:6px;
-    box-sizing:border-box;
-}
-
-#resultList {
-    max-height:200px;
-    overflow-y:auto;
-    display:none;
-}
-
-.resultItem { cursor:pointer; padding:2px 0; }
-.resultItem:hover { background:#eee; }
-
-.debug-point {
-    width:10px;
-    height:10px;
-    background:#ff0000;
-    border:2px solid white;
-    border-radius:50%;
-}
-
-.sector_label {
-    font-size:28px;
-    font-weight:bold;
-    color:yellow;
-    text-shadow:
-        -2px -2px 0 black,
-         2px -2px 0 black,
-        -2px  2px 0 black,
-         2px  2px 0 black;
-    white-space:nowrap;
-}
-
-#floatplanner-output {
-    position:absolute;
-    bottom:10px;
-    left:10px;
-    z-index:1000;
-    background:rgba(0,0,0,0.7);
-    color:#0f0;
-    padding:6px 10px;
-    font-family:monospace;
-    border-radius:6px;
-}
-</style>
-
-<script>
-
-var all_markers = [];
-var lmap = null;
-
-var debug_points = [];
-var float_line = null;
-
-var floatplanner_layer = L.layerGroup();
-var floatplanner_active = false;
-
-var district_layers = {};
-var layer_control = null;
-
-var label_markers = [];   // NEW
-
-const floatplanner_show_grid = true;
-const floatplanner_step_pixels = 10;
-const label_min_zoom = 4; // NEW
-
-var debug_icon = L.divIcon({
-    className:"debug-point",
-    iconSize:[10,10]
-});
-
-function loadmap() {
-
-    lmap = new SLMap(document.getElementById('map-container'));
-    lmap.setView([1012,1076],2);
-
-    load_stations();
-    load_sectors();
-
-    lmap.on("click", function(e){
-        if(floatplanner_active){
-            create_debug_point(e.latlng);
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
         }
-    });
 
-    lmap.on("zoomend", update_label_visibility); // NEW
-
-    document.getElementById("searchBox")
-        .addEventListener("input", filter_markers);
-
-    layer_control = L.control.layers(
-        null,
-        { "Floatplanner": floatplanner_layer }
-    ).addTo(lmap);
-
-    lmap.on('overlayadd', function(e){
-        if(e.layer === floatplanner_layer){
-            floatplanner_active = true;
+        #map-container {
+            width: 100%;
+            height: 100%;
         }
-    });
 
-    lmap.on('overlayremove', function(e){
-        if(e.layer === floatplanner_layer){
-            floatplanner_active = false;
-            reset_floatplanner();
+        #search-container {
+            position: absolute;
+            z-index: 1000;
+            top: 10px;
+            left: 80px;
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            width: 260px;
+            font-family: sans-serif;
+            font-size: 14px;
         }
-    });
-}
 
-function update_label_visibility(){   // NEW
-    var zoom = lmap.getZoom();
-    var show = zoom >= label_min_zoom;
-
-    label_markers.forEach(m=>{
-        if(show){
-            if(!lmap.hasLayer(m)) m.addTo(lmap);
-        } else {
-            if(lmap.hasLayer(m)) lmap.removeLayer(m);
+        #searchBox {
+            width: 100%;
+            padding: 4px;
+            margin-bottom: 6px;
+            box-sizing: border-box;
         }
-    });
-}
 
-function reset_floatplanner(){
-    debug_points.forEach(m => floatplanner_layer.removeLayer(m));
-    debug_points = [];
+        #resultList {
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
 
-    if(float_line){
-        floatplanner_layer.removeLayer(float_line);
-        float_line = null;
-    }
+        .resultItem {
+            cursor: pointer;
+            padding: 2px 0;
+        }
 
-    document.getElementById("floatplanner-output").textContent = "";
-}
+        .resultItem:hover {
+            background: #eee;
+        }
 
-function load_stations(){
-    fetch('stations.json')
-        .then(r=>r.json())
-        .then(stations=>{
-            stations.forEach(station=>{
-                var icon=L.icon({
-                    iconUrl:"marker/"+station.marker,
-                    iconSize:[30,40]
-                });
+        .debug-point {
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
 
-                var marker=L.marker(
-                    [station.grid_pos[1],station.grid_pos[0]],
-                    {icon:icon}
-                ).addTo(lmap);
+        .sector_label {
+            font-size: 28px;
+            font-weight: bold;
+            color: yellow;
+            text-shadow:
+                -2px -2px 0 black,
+                2px -2px 0 black,
+                -2px 2px 0 black,
+                2px 2px 0 black;
+            white-space: nowrap;
+        }
 
-                marker.stationData=station;
-                marker.bindTooltip(
-                    station.name,
-                    {
-                        direction: "top",
-                        offset: [0, -10]
-                    }
-                );
-                all_markers.push(marker);
+        #floatplanner-output {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            color: #0f0;
+            padding: 6px 10px;
+            font-family: monospace;
+            border-radius: 6px;
+        }
 
-                if (station.url) {
-                    marker.bindPopup(
-                        "<b>" + station.name + "</b><br>" +
-                        "<a href='" + station.url + "' target='_blank'>Teleport</a>"
-                    );
+        /* -----------------------------
+   Leaflet tooltip CSS patch
+   (SL map CSS does not always include these)
+----------------------------- */
+
+        .leaflet-tooltip {
+            position: absolute;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 650;
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+
+        .leaflet-tooltip:before {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .leaflet-tooltip-top:before {
+            bottom: -6px;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px 6px 0 6px;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+
+        .leaflet-tooltip-bottom:before {
+            top: -6px;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 0 6px 6px 6px;
+            border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+        }
+
+        .leaflet-tooltip-left:before {
+            right: -6px;
+            top: 50%;
+            margin-top: -6px;
+            border-width: 6px 0 6px 6px;
+            border-color: transparent transparent transparent rgba(0, 0, 0, 0.8);
+        }
+
+        .leaflet-tooltip-right:before {
+            left: -6px;
+            top: 50%;
+            margin-top: -6px;
+            border-width: 6px 6px 6px 0;
+            border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+        }
+    </style>
+
+    <script>
+
+        var all_markers = [];
+        var lmap = null;
+
+        var debug_points = [];
+        var float_line = null;
+
+        var floatplanner_layer = L.layerGroup();
+        var floatplanner_active = false;
+
+        var district_layers = {};
+        var layer_control = null;
+
+        var label_markers = [];
+
+        const floatplanner_show_grid = false;
+        const floatplanner_step_pixels = 10;
+        const label_min_zoom = 4;
+
+        var debug_icon = L.divIcon({
+            className: "debug-point",
+            iconSize: [10, 10]
+        });
+
+        function loadmap() {
+
+            lmap = new SLMap(document.getElementById('map-container'));
+            lmap.setView([1012, 1076], 2);
+
+            load_stations();
+            load_sectors();
+
+            lmap.on("click", function (e) {
+                if (floatplanner_active) {
+                    create_debug_point(e.latlng);
                 }
             });
 
-            update_result_list(all_markers);
-        });
-}
+            lmap.on("zoomend", update_label_visibility);
 
-function load_sectors(){
+            document.getElementById("searchBox")
+                .addEventListener("input", filter_markers);
 
-    fetch('sectors.json')
-        .then(r=>r.json())
-        .then(sectors=>{
+            layer_control = L.control.layers(
+                null,
+                { "Floatplanner": floatplanner_layer }
+            ).addTo(lmap);
 
-            district_layers = {};
-            label_markers = [];
-
-            sectors.forEach(sec=>{
-
-                if(!district_layers[sec.district]){
-                    district_layers[sec.district] = L.layerGroup().addTo(lmap);
+            lmap.on('overlayadd', function (e) {
+                if (e.layer === floatplanner_layer) {
+                    floatplanner_active = true;
                 }
+            });
 
-                var layer = district_layers[sec.district];
+            lmap.on('overlayremove', function (e) {
+                if (e.layer === floatplanner_layer) {
+                    floatplanner_active = false;
+                    reset_floatplanner();
+                }
+            });
+        }
 
-                var latlngs = sec.coords.map(p=>[p[1],p[0]]);
-                var polygon = L.polygon(latlngs,{
-                    color:sec.color,
-                    weight:3,
-                    fillOpacity:0
-                });
+        function update_label_visibility() {
+            var zoom = lmap.getZoom();
+            var show = zoom >= label_min_zoom;
 
-                layer.addLayer(polygon);
+            label_markers.forEach(m => {
+                if (show) {
+                    if (!lmap.hasLayer(m)) m.addTo(lmap);
+                } else {
+                    if (lmap.hasLayer(m)) lmap.removeLayer(m);
+                }
+            });
+        }
 
-                if(sec.labels){
-                    sec.labels.forEach(lbl=>{
+        function reset_floatplanner() {
+            debug_points.forEach(m => floatplanner_layer.removeLayer(m));
+            debug_points = [];
 
-                        var label_icon = L.divIcon({
-                            className:"sector_label",
-                            html:lbl.text,
-                            iconSize:[0,0]
+            if (float_line) {
+                floatplanner_layer.removeLayer(float_line);
+                float_line = null;
+            }
+
+            document.getElementById("floatplanner-output").textContent = "";
+        }
+
+        function load_stations() {
+            fetch('stations.json')
+                .then(r => r.json())
+                .then(stations => {
+                    stations.forEach(station => {
+                        var icon = L.icon({
+                            iconUrl: "marker/" + station.marker,
+                            iconSize: [30, 40]
                         });
 
-                        var label_marker = L.marker(
-                            [lbl.pos[1], lbl.pos[0]],
-                            { icon:label_icon, draggable:floatplanner_active }
+                        var marker = L.marker(
+                            [station.grid_pos[1], station.grid_pos[0]],
+                            { icon: icon }
+                        ).addTo(lmap);
+
+                        marker.stationData = station;
+
+                        // Hover tooltip (now visible due to CSS patch)
+                        marker.bindTooltip(
+                            station.name,
+                            {
+                                direction: "top",
+                                sticky: true,
+                                opacity: 0.95
+                            }
                         );
 
-                        layer.addLayer(label_marker);
-                        label_markers.push(label_marker); // NEW
-                    });
-                }
+                        all_markers.push(marker);
 
+                        if (station.url) {
+                            marker.bindPopup(
+                                "<b>" + station.name + "</b><br>" +
+                                "<a href='" + station.url + "' target='_blank'>Teleport</a>"
+                            );
+                        }
+                    });
+
+                    update_result_list(all_markers);
+                });
+        }
+
+        function load_sectors() {
+
+            fetch('sectors.json')
+                .then(r => r.json())
+                .then(sectors => {
+
+                    district_layers = {};
+                    label_markers = [];
+
+                    sectors.forEach(sec => {
+
+                        if (!district_layers[sec.district]) {
+                            district_layers[sec.district] = L.layerGroup().addTo(lmap);
+                        }
+
+                        var layer = district_layers[sec.district];
+
+                        var latlngs = sec.coords.map(p => [p[1], p[0]]);
+                        var polygon = L.polygon(latlngs, {
+                            color: sec.color,
+                            weight: 3,
+                            fillOpacity: 0
+                        });
+
+                        layer.addLayer(polygon);
+
+                        if (sec.labels) {
+                            sec.labels.forEach(lbl => {
+
+                                var label_icon = L.divIcon({
+                                    className: "sector_label",
+                                    html: lbl.text,
+                                    iconSize: [0, 0]
+                                });
+
+                                var label_marker = L.marker(
+                                    [lbl.pos[1], lbl.pos[0]],
+                                    { icon: label_icon, draggable: floatplanner_active }
+                                );
+
+                                layer.addLayer(label_marker);
+                                label_markers.push(label_marker);
+                            });
+                        }
+
+                    });
+
+                    if (layer_control) layer_control.remove();
+
+                    var overlays = {};
+                    for (var d in district_layers) {
+                        overlays["District " + d] = district_layers[d];
+                    }
+
+                    overlays["Floatplanner"] = floatplanner_layer;
+
+                    layer_control = L.control.layers(null, overlays).addTo(lmap);
+
+                    update_label_visibility();
+                });
+        }
+
+        /* search */
+
+        function filter_markers() {
+
+            var search = document.getElementById("searchBox").value.toLowerCase().trim();
+            var visible = [];
+
+            all_markers.forEach(marker => {
+
+                var name = (marker.stationData.name || "").toLowerCase();
+                var region = (marker.stationData.region || "").toLowerCase();
+
+                if (search.length === 0 || name.includes(search) || region.includes(search)) {
+                    if (!lmap.hasLayer(marker)) marker.addTo(lmap);
+                    visible.push(marker);
+                } else {
+                    if (lmap.hasLayer(marker)) lmap.removeLayer(marker);
+                }
             });
 
-            if(layer_control) layer_control.remove();
+            update_result_list(visible);
+        }
 
-            var overlays = {};
-            for(var d in district_layers){
-                overlays["District " + d] = district_layers[d];
+        function update_result_list(markers) {
+
+            var list = document.getElementById("resultList");
+            var search = document.getElementById("searchBox").value.trim();
+
+            list.innerHTML = "";
+
+            if (search.length === 0) {
+                list.style.display = "none";
+                return;
             }
 
-            overlays["Floatplanner"] = floatplanner_layer;
+            list.style.display = "block";
 
-            layer_control = L.control.layers(null, overlays).addTo(lmap);
+            markers.forEach(marker => {
 
-            update_label_visibility(); // NEW
-        });
-}
+                var div = document.createElement("div");
+                div.className = "resultItem";
+                div.textContent = marker.stationData.name;
 
-/* search */
+                div.onclick = function () {
+                    lmap.setView(marker.getLatLng(), 6);
+                    if (marker.getPopup && marker.getPopup()) marker.openPopup();
+                };
 
-function filter_markers(){
-
-    var search = document.getElementById("searchBox").value.toLowerCase().trim();
-    var visible = [];
-
-    all_markers.forEach(marker => {
-
-        var name = (marker.stationData.name || "").toLowerCase();
-        var region = (marker.stationData.region || "").toLowerCase();
-
-        if (search.length === 0 || name.includes(search) || region.includes(search)) {
-            if (!lmap.hasLayer(marker)) marker.addTo(lmap);
-            visible.push(marker);
-        } else {
-            if (lmap.hasLayer(marker)) lmap.removeLayer(marker);
+                list.appendChild(div);
+            });
         }
-    });
 
-    update_result_list(visible);
-}
+        /* floatplanner */
 
-function update_result_list(markers){
+        function create_debug_point(latlng) {
 
-    var list = document.getElementById("resultList");
-    var search = document.getElementById("searchBox").value.trim();
+            var marker = L.marker(latlng, {
+                draggable: true,
+                icon: debug_icon
+            }).addTo(floatplanner_layer);
 
-    list.innerHTML = "";
+            if (floatplanner_show_grid) {
+                marker.bindTooltip(
+                    Math.round(latlng.lng) + " " + Math.round(latlng.lat),
+                    { permanent: true }
+                );
+            }
 
-    if (search.length === 0) {
-        list.style.display = "none";
-        return;
-    }
+            marker.on("dragend", update_float_line);
 
-    list.style.display = "block";
+            debug_points.push(marker);
+            update_float_line();
+        }
 
-    markers.forEach(marker => {
+        function update_float_line() {
 
-        var div = document.createElement("div");
-        div.className = "resultItem";
-        div.textContent = marker.stationData.name;
+            if (float_line) {
+                floatplanner_layer.removeLayer(float_line);
+            }
 
-        div.onclick = function(){
-            lmap.setView(marker.getLatLng(), 6);
-            if (marker.getPopup && marker.getPopup()) marker.openPopup();
-        };
+            if (debug_points.length < 2) {
+                document.getElementById("floatplanner-output").textContent = "";
+                return;
+            }
 
-        list.appendChild(div);
-    });
-}
+            var latlngs = debug_points.map(m => m.getLatLng());
 
-/* floatplanner */
+            float_line = L.polyline(latlngs, {
+                color: "#ff0000",
+                weight: 2
+            }).addTo(floatplanner_layer);
 
-function create_debug_point(latlng){
+            compute_float_string(latlngs);
+        }
 
-    var marker=L.marker(latlng,{
-        draggable:true,
-        icon:debug_icon
-    }).addTo(floatplanner_layer);
+        function format_direction_string(str) {
 
-    if(floatplanner_show_grid){
-        marker.bindTooltip(
-            Math.round(latlng.lng)+" "+Math.round(latlng.lat),
-            {permanent:true}
-        );
-    }
+            if (!str || str.length === 0) return "";
 
-    marker.on("dragend",update_float_line);
+            let result = [];
+            let current = str[0];
+            let count = 1;
 
-    debug_points.push(marker);
-    update_float_line();
-}
+            for (let i = 1; i < str.length; i++) {
+                if (str[i] === current) {
+                    count++;
+                } else {
+                    result.push(count + current);
+                    current = str[i];
+                    count = 1;
+                }
+            }
 
-function update_float_line(){
-
-    if(float_line){
-        floatplanner_layer.removeLayer(float_line);
-    }
-
-    if(debug_points.length<2) {
-        document.getElementById("floatplanner-output").textContent = "";
-        return;
-    }
-
-    var latlngs=debug_points.map(m=>m.getLatLng());
-
-    float_line=L.polyline(latlngs,{
-        color:"#ff0000",
-        weight:2
-    }).addTo(floatplanner_layer);
-
-    compute_float_string(latlngs);
-}
-
-function format_direction_string(str) {
-
-    if (!str || str.length === 0) return "";
-
-    let result = [];
-    let current = str[0];
-    let count = 1;
-
-    for (let i = 1; i < str.length; i++) {
-        if (str[i] === current) {
-            count++;
-        } else {
             result.push(count + current);
-            current = str[i];
-            count = 1;
+            return result.join(" ");
         }
-    }
 
-    result.push(count + current);
-    return result.join(" ");
-}
+        function export_floatplanner_points() {
 
-function compute_float_string(latlngs){
-
-    let result="";
-    let prev_corner=null;
-
-    for(let i=0;i<latlngs.length-1;i++){
-
-        let a=lmap.latLngToContainerPoint(latlngs[i]);
-        let b=lmap.latLngToContainerPoint(latlngs[i+1]);
-
-        let dist=a.distanceTo(b);
-        let steps=Math.floor(dist/floatplanner_step_pixels);
-        if (steps <= 0) continue;
-
-        for(let s=0;s<=steps;s++){
-
-            let t=s/steps;
-            let px=a.x+(b.x-a.x)*t;
-            let py=a.y+(b.y-a.y)*t;
-
-            let ll=lmap.containerPointToLatLng([px,py]);
-
-            let corner=[
-                Math.floor(ll.lng),
-                Math.floor(ll.lat)
-            ];
-
-            if(!prev_corner){
-                prev_corner=corner;
-                continue;
+            if (debug_points.length === 0) {
+                console.log("no points");
+                return;
             }
 
-            if(corner[0]===prev_corner[0] && corner[1]===prev_corner[1]){
-                continue;
+            console.log("---- floatplanner points ----");
+
+            debug_points.forEach(marker => {
+                var pos = marker.getLatLng();
+
+                var gx = Math.round(pos.lng);
+                var gy = Math.round(pos.lat);
+
+                console.log(gx + " " + gy);
+            });
+
+            console.log("END");
+        }
+
+
+        function compute_float_string(latlngs) {
+
+            let result = "";
+            let prev_corner = null;
+
+            for (let i = 0; i < latlngs.length - 1; i++) {
+
+                let a = lmap.latLngToContainerPoint(latlngs[i]);
+                let b = lmap.latLngToContainerPoint(latlngs[i + 1]);
+
+                let dist = a.distanceTo(b);
+                let steps = Math.floor(dist / floatplanner_step_pixels);
+                if (steps <= 0) continue;
+
+                for (let s = 0; s <= steps; s++) {
+
+                    let t = s / steps;
+                    let px = a.x + (b.x - a.x) * t;
+                    let py = a.y + (b.y - a.y) * t;
+
+                    let ll = lmap.containerPointToLatLng([px, py]);
+
+                    let corner = [
+                        Math.floor(ll.lng),
+                        Math.floor(ll.lat)
+                    ];
+
+                    if (!prev_corner) {
+                        prev_corner = corner;
+                        continue;
+                    }
+
+                    if (corner[0] === prev_corner[0] && corner[1] === prev_corner[1]) {
+                        continue;
+                    }
+
+                    let dx = corner[0] - prev_corner[0];
+                    let dy = corner[1] - prev_corner[1];
+
+                    if (dy > 0) result += "N";
+                    else if (dy < 0) result += "S";
+                    else if (dx > 0) result += "E";
+                    else if (dx < 0) result += "W";
+
+                    prev_corner = corner;
+                }
             }
 
-            let dx=corner[0]-prev_corner[0];
-            let dy=corner[1]-prev_corner[1];
-
-            if(dy>0) result+="N";
-            else if(dy<0) result+="S";
-            else if(dx>0) result+="E";
-            else if(dx<0) result+="W";
-
-            prev_corner=corner;
+            let formatted = format_direction_string(result);
+            document.getElementById("floatplanner-output").textContent = formatted;
         }
-    }
 
-    let formatted = format_direction_string(result);
-    document.getElementById("floatplanner-output").textContent = formatted;
-}
+        document.addEventListener("keydown", function (e) {
 
-document.addEventListener("keydown",function(e){
+            if (e.key === "Escape") {
+                document.getElementById("searchBox").value = "";
+                document.getElementById("resultList").style.display = "none";
+                filter_markers();
+            }
 
-    if(e.key==="Escape"){
-        document.getElementById("searchBox").value = "";
-        document.getElementById("resultList").style.display = "none";
-        filter_markers();
-    }
+            if (e.key === "d" || e.key === "D") {
+                if (debug_points.length === 0) return;
+                let m = debug_points.pop();
+                floatplanner_layer.removeLayer(m);
+                update_float_line();
+            }
 
-    if(e.key==="d"||e.key==="D"){
-        if(debug_points.length===0)return;
-        let m=debug_points.pop();
-        floatplanner_layer.removeLayer(m);
-        update_float_line();
-    }
-});
+            if (e.key === "e" || e.key === "E") {
+                if (floatplanner_active) {
+                    export_floatplanner_points();
+                }
+            }
 
-</script>
+        });
+
+    </script>
 </head>
 
 <body onload="loadmap()">
 
-<div id="search-container">
-    <input type="text" id="searchBox" placeholder="Search...">
-    <div id="resultList"></div>
-</div>
+    <div id="search-container">
+        <input type="text" id="searchBox" placeholder="Search...">
+        <div id="resultList"></div>
+    </div>
 
-<div id="floatplanner-output"></div>
+    <div id="floatplanner-output"></div>
 
-<div id="map-container"></div>
+    <div id="map-container"></div>
 
 </body>
+
 </html>
