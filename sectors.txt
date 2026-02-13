@@ -149,7 +149,6 @@ yellow
 1097 1048
 END
 
-
 3
 10
 white
