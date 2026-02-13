@@ -102,10 +102,38 @@
                         .addEventListener("input", filterMarkers);
 
                     updateResultList(allMarkers);
+                    loadSectors();
 
                 })
                 .catch(err => console.error("failed to load resources", err));
         }
+
+        function loadSectors() {
+            fetch('sectors.json')
+                .then(response => response.json())
+                .then(sectors => {
+        
+                    sectors.forEach(sec => {
+        
+                        var latlngs = sec.coords.map(p => [p[1], p[0]]);
+        
+                        var polygon = L.polygon(latlngs, {
+                            color: sec.color,
+                            fillColor: sec.color,
+                            weight: 3,
+                            fillOpacity: 0.15
+                        }).addTo(lmap);
+        
+                        polygon.bindTooltip(
+                            "District " + sec.district + " - Sector " + sec.sector,
+                            { sticky: true }
+                        );
+                    });
+        
+                })
+                .catch(err => console.error("failed to load sectors", err));
+        }
+
 
         function filterMarkers() {
             var search = document.getElementById("searchBox").value.toLowerCase();
