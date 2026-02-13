@@ -82,7 +82,14 @@ var debugPoints = [];
 var debugPolygon = null;
 var lmap = null;
 
-const DEBUG_POLYGON_POINTS = true;
+// Label markers for zoom-based visibility
+var labelMarkers = [];
+
+// Debug / editor mode
+const DEBUG_POLYGON_POINTS = false;
+
+// Show labels only at/above this zoom level
+const LABEL_MIN_ZOOM = 2;
 
 var debugIcon = L.divIcon({
     className: "debug-point",
@@ -97,10 +104,16 @@ function loadmap() {
     loadStations();
     loadSectors();
 
+    // Klick auf Karte erzeugt Debugpunkt
     lmap.on("click", function(e) {
         if (DEBUG_POLYGON_POINTS) {
             createDebugPoint(e.latlng);
         }
+    });
+
+    // Update label visibility when zoom changes
+    lmap.on("zoomend", function() {
+        updateLabelVisibility();
     });
 }
 
@@ -145,6 +158,12 @@ function loadSectors() {
         .then(r => r.json())
         .then(sectors => {
 
+            // reset labels if reloading
+            labelMarkers.forEach(m => {
+                if (lmap && lmap.removeLayer) lmap.removeLayer(m);
+            });
+            labelMarkers = [];
+
             sectors.forEach(sec => {
 
                 var latlngs = sec.coords.map(p => [p[1], p[0]]);
@@ -172,7 +191,7 @@ function loadSectors() {
                                 icon: labelIcon,
                                 draggable: DEBUG_POLYGON_POINTS
                             }
-                        ).addTo(lmap);
+                        );
 
                         // Position nach Verschieben ausgeben
                         labelMarker.on("dragend", function(e) {
@@ -185,11 +204,33 @@ function loadSectors() {
                             );
                         });
 
+                        labelMarkers.push(labelMarker);
                     });
                 }
 
             });
+
+            // apply initial visibility based on current zoom
+            updateLabelVisibility();
         });
+}
+
+function updateLabelVisibility() {
+    if (!lmap || !labelMarkers) return;
+
+    var z = (typeof lmap.getZoom === "function") ? lmap.getZoom() : 0;
+    var shouldShow = z >= LABEL_MIN_ZOOM;
+
+    labelMarkers.forEach(m => {
+        // lmap.hasLayer exists on Leaflet maps; SLMap should support it
+        var onMap = (typeof lmap.hasLayer === "function") ? lmap.hasLayer(m) : false;
+
+        if (shouldShow && !onMap) {
+            m.addTo(lmap);
+        } else if (!shouldShow && onMap) {
+            lmap.removeLayer(m);
+        }
+    });
 }
 
 function filterMarkers() {
