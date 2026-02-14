@@ -64,7 +64,7 @@
         }
 
         .sector_label {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: bold;
             color: yellow;
             text-shadow:
@@ -86,11 +86,6 @@
             font-family: monospace;
             border-radius: 6px;
         }
-
-        /* -----------------------------
-   Leaflet tooltip CSS patch
-   (SL map CSS does not always include these)
------------------------------ */
 
         .leaflet-tooltip {
             position: absolute;
@@ -164,7 +159,7 @@
 
         const floatplanner_show_grid = false;
         const floatplanner_step_pixels = 10;
-        const label_min_zoom = 4;
+        const label_min_zoom = 0;
 
         var debug_icon = L.divIcon({
             className: "debug-point",
@@ -185,7 +180,8 @@
                 }
             });
 
-            lmap.on("zoomend", update_label_visibility);
+            lmap.on("zoomend", refresh_labels);
+
 
             document.getElementById("searchBox")
                 .addEventListener("input", filter_markers);
@@ -199,17 +195,29 @@
                 if (e.layer === floatplanner_layer) {
                     floatplanner_active = true;
                 }
+                refresh_labels();
+
+
             });
 
             lmap.on('overlayremove', function (e) {
                 if (e.layer === floatplanner_layer) {
                     floatplanner_active = false;
                     reset_floatplanner();
+
                 }
+                refresh_labels();
+
             });
         }
 
-        function update_label_visibility() {
+        function refresh_labels() {
+            update_label_visibility();
+            update_label_scale();
+        }
+
+
+        function xupdate_label_scale() {
             var zoom = lmap.getZoom();
             var show = zoom >= label_min_zoom;
 
@@ -221,6 +229,34 @@
                 }
             });
         }
+
+        function update_label_visibility() {
+
+            var zoom_ok = lmap.getZoom() >= label_min_zoom;
+
+            label_markers.forEach(m => {
+
+                var district_visible = lmap.hasLayer(m._district_layer);
+
+                if (zoom_ok && district_visible) {
+
+                    if (!m._visible) {
+                        m._district_layer.addLayer(m);
+                        m._visible = true;
+                    }
+
+                } else {
+
+                    if (m._visible) {
+                        m._district_layer.removeLayer(m);
+                        m._visible = false;
+                    }
+
+                }
+
+            });
+        }
+
 
         function reset_floatplanner() {
             debug_points.forEach(m => floatplanner_layer.removeLayer(m));
@@ -261,6 +297,11 @@
                             }
                         );
 
+                        marker.on("click", function () {
+                            lmap.flyTo(marker.getLatLng(), 6);
+                        });
+
+
                         all_markers.push(marker);
 
                         if (station.url) {
@@ -274,6 +315,38 @@
                     update_result_list(all_markers);
                 });
         }
+
+        function xupdate_label_scale() {
+
+            var zoom = lmap.getZoom();
+
+            var size = 14 + (zoom * 2);
+
+            size = Math.max(12, Math.min(size, 40));
+
+            var labels = document.getElementsByClassName("sector_label");
+
+            for (var i = 0; i < labels.length; i++) {
+                labels[i].style.fontSize = size + "px";
+            }
+        }
+
+
+        function update_label_scale() {
+
+            var zoom = lmap.getZoom();
+
+            var size = 14 + (zoom * 2);
+            size = Math.max(12, Math.min(size, 40));
+
+            label_markers.forEach(marker => {
+                var el = marker.getElement();
+                if (el) {
+                    el.style.fontSize = size + "px";
+                }
+            });
+        }
+
 
         function load_sectors() {
 
@@ -315,8 +388,11 @@
                                     { icon: label_icon, draggable: floatplanner_active }
                                 );
 
+                                label_marker._visible = true;
+                                label_marker._district_layer = layer;
                                 layer.addLayer(label_marker);
                                 label_markers.push(label_marker);
+
                             });
                         }
 
@@ -334,6 +410,7 @@
                     layer_control = L.control.layers(null, overlays).addTo(lmap);
 
                     update_label_visibility();
+                    update_label_scale();
                 });
         }
 
