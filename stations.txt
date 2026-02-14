@@ -1,0 +1,383 @@
+Station Hikuelo - D1
+https://maps.secondlife.com/secondlife/Hikuelo/108/234/22
+station.png
+
+Station Kania - D1
+https://maps.secondlife.com/secondlife/Kania/37/226/35
+station.png
+
+Station Abbotts Field - main - D1
+https://maps.secondlife.com/secondlife/Abbotts/136/120/34
+station.png
+
+Station Abbotts Field - small boat docks - D1
+https://maps.secondlife.com/secondlife/Abbotts/40/121/23
+station.png
+
+Station Abbotts Field - large boat pier - D1
+https://maps.secondlife.com/secondlife/Abbotts/108/22/21
+station.png
+
+Substation Bay City - D1
+https://maps.secondlife.com/secondlife/Bay%20City%20-%20Morton/243/111/25
+substation.png
+
+Substation Hotei - D1
+https://maps.secondlife.com/secondlife/Hotei/160/236/23
+substation.png
+
+Substation Tenjin - D1
+https://maps.secondlife.com/secondlife/Tenjin/157/212/27
+substation.png
+
+Substation Gogebic - docks - D1
+https://maps.secondlife.com/secondlife/Gogebic/199/54/83
+substation.png
+
+Substation Gogebic - airstrip - D1
+https://maps.secondlife.com/secondlife/Gogebic/141/229/107
+air_station.png
+
+Substation and Sail Center Annex Butler - D1
+https://maps.secondlife.com/secondlife/Butler/21/58/22
+substation.png
+
+Substation Long Meg - D1
+https://maps.secondlife.com/secondlife/Long%20Meg/158/19/22
+substation.png
+
+Radar Station Cranberry - main - D1
+https://maps.secondlife.com/secondlife/Cranberry/181/223/102
+radar_station.png
+
+Radar Station Cranberry - docks - D1
+https://maps.secondlife.com/secondlife/Cranberry/217/213/81
+radar_station.png
+
+Substation Anton - D1
+https://maps.secondlife.com/secondlife/Anton/147/34/103
+substation.png
+
+Substation North Pole - D1
+https://maps.secondlife.com/secondlife/Virrat/13/132/99
+substation.png
+
+Substation Shepard’s Point - D1
+https://maps.secondlife.com/secondlife/Scotopteryx/40/228/22
+substation.png
+
+Substation Serendipity - D1
+https://maps.secondlife.com/secondlife/Eggar/200/43/24
+substation.png
+
+Substation Consular - D1
+https://maps.secondlife.com/secondlife/Consular/216/51/22
+substation.png
+
+Substation Crameri - D1
+https://maps.secondlife.com/secondlife/Crameri/219/192/21
+substation.png
+
+Substation Promissa - D1
+https://maps.secondlife.com/secondlife/Promissa/174/201/22
+substation.png
+
+Air Substation Daybreak - D1
+https://maps.secondlife.com/secondlife/Lyonet/46/224/106
+air_station.png
+
+Substation Besma - D1
+https://maps.secondlife.com/secondlife/Besma/66/79/22
+substation.png
+
+Ice Station Amundsen - D1
+https://maps.secondlife.com/secondlife/Nonantola/149/72/24
+snow_station.png
+
+Mountain Rescue Outpost, D1 S7
+https://maps.secondlife.com/secondlife/Kendall/234/29/128
+snow_station.png
+
+Supply Depot Bretton, D1 S7
+https://maps.secondlife.com/secondlife/Bretton/14/126/106
+snow_station.png
+
+Polar Ops HQ, D1 S7
+https://maps.secondlife.com/secondlife/Bretton/51/53/107
+snow_station.png
+
+Chapel, D1 S8
+https://maps.secondlife.com/secondlife/Abbotts/164/222/44
+church_station.png
+
+Polar Ops K-9 Training Center, D1 S7 (road)
+https://maps.secondlife.com/secondlife/Braggiani/101/205/84
+k9_station.png
+
+Polar Ops K-9 Training Center, D1 S7 (docks)
+https://maps.secondlife.com/secondlife/Braggiani/15/172/21
+k9_station.png
+
+Station Sarcee - D2
+https://maps.secondlife.com/secondlife/Sarcee/239/218/23
+station.png
+
+Station Promethium - D2
+https://maps.secondlife.com/secondlife/Promethium/138/55/25
+station.png
+
+Station Promethium Hangar @ Port Scandium Airport - D2
+https://maps.secondlife.com/secondlife/Promethium/143/69/181
+air_station.png
+
+Promethium South end of airstrip, 66 ASML - D2
+https://maps.secondlife.com/secondlife/Promethium/88/97/86
+air_station.png
+
+Air Substation Exxilon - D2
+https://maps.secondlife.com/secondlife/Exxilon/132/235/43
+air_station.png
+
+Air Substation Monowai - D2
+https://maps.secondlife.com/secondlife/Monowai/173/83/79
+air_station.png
+
+Substation Kang Nae - D2
+https://maps.secondlife.com/secondlife/Kang%20Nae/58/224/22
+substation.png
+
+Substation & Diver Center Solha - D2
+https://maps.secondlife.com/secondlife/Solha/99/211/22
+dive_station.png
+
+Substation Ahnpyung - D2
+https://maps.secondlife.com/secondlife/Ahnpyung/2/126/22
+substation.png
+
+Substation Yeosol - D2
+https://maps.secondlife.com/secondlife/Yeosol/146/243/22
+substation.png
+
+Sail Center Annex Jingi - D2
+https://maps.secondlife.com/secondlife/Jingi/73/218/22
+sail_station.png
+
+Station Munro & Noumea Airport - D2
+https://maps.secondlife.com/secondlife/Saddlemead/124/9/23
+air_station.png
+
+Station Munro Cemetary - D2
+https://maps.secondlife.com/secondlife/Saddlemead/111/36/702
+church_station.png
+
+Station Byron Bay - D3
+https://maps.secondlife.com/secondlife/Svitjod/219/69/23
+station.png
+
+Station Danshire - D3
+https://maps.secondlife.com/secondlife/Venrigalli/106/52/22
+station.png
+
+Station New Horizons - D3
+https://maps.secondlife.com/secondlife/Alphubel/128/141/23
+station.png
+
+Station Santa Catalina - D3
+https://maps.secondlife.com/secondlife/Hollywood/239/35/22
+station.png
+
+Substation Qlar Fell - D3
+https://maps.secondlife.com/secondlife/Qlar%20Fell/158/218/22
+substation.png
+
+Substation Quagmire - D3
+https://maps.secondlife.com/secondlife/Quagmire/105/168/23
+substation.png
+
+Substation Agrippa - D3
+https://maps.secondlife.com/secondlife/Agrippa/219/242/22
+substation.png
+
+Substation Vorlheim - D3
+https://maps.secondlife.com/secondlife/Vorlheim/241/9/22
+substation.png
+
+Substation Remora - D3
+https://maps.secondlife.com/secondlife/Remora/88/228/22
+substation.png
+
+Substation Starfish - Main/Airport ramp - D3
+https://maps.secondlife.com/secondlife/Hardrada/158/156/43
+air_station.png
+
+Substation Starfish - Lake Docks - D3
+https://maps.secondlife.com/secondlife/Hardrada/38/44/23
+substation.png
+
+Substation Starfish - East Docks - D3
+https://maps.secondlife.com/secondlife/Hardrada/158/33/22
+substation.png
+
+Substation Sailstice - D3
+https://maps.secondlife.com/secondlife/Erik/174/41/22
+substation.png
+
+Substation Kuna - D3
+https://maps.secondlife.com/secondlife/Chomo/209/2/22
+substation.png
+
+Substation Kuna enter harbor here - D3
+https://maps.secondlife.com/secondlife/Kunapipi/114/5/25
+misc_station.png
+
+Substation Imelza - D3
+https://maps.secondlife.com/secondlife/Imelza/224/21/22
+substation.png
+
+Substation Egle - D3
+https://maps.secondlife.com/secondlife/Egle/185/48/22
+substation.png
+
+Substation Sialimonus - D3
+https://maps.secondlife.com/secondlife/Sialimonus/42/83/24
+substation.png
+
+Air Station Acknefar - D3
+https://maps.secondlife.com/secondlife/Acknefar/185/128/24
+air_station.png
+
+Station Discovery - D4
+https://maps.secondlife.com/secondlife/Artsebarsky/29/196/23
+station.png
+
+Station Mignon - D4
+https://maps.secondlife.com/secondlife/Tigger/90/191/22
+station.png
+
+Station Terranova - D4
+https://maps.secondlife.com/secondlife/Norstrilia/26/237/22
+station.png
+
+Substation Kolbeinsey - D4
+https://maps.secondlife.com/secondlife/Kolbeinsey/165/99/22
+substation.png
+
+Substation Clearbrook - D4
+https://maps.secondlife.com/secondlife/Clearbrook/164/139/22
+substation.png
+
+Substation Aydat - D4
+https://maps.secondlife.com/secondlife/Aydat/17/230/22
+substation.png
+
+Substation Mordicub - D4
+https://maps.secondlife.com/secondlife/Mordicub/224/76/21
+substation.png
+
+Substation Hyralios - D4
+https://maps.secondlife.com/secondlife/Hyralios/55/239/22
+substation.png
+
+Substation Slice - D4
+https://maps.secondlife.com/secondlife/Danshire/157/65/22
+substation.png
+
+Substation Sheershank - D4
+https://maps.secondlife.com/secondlife/Sheershank/204/234/22
+substation.png
+
+Substation Sorbet - D4
+https://maps.secondlife.com/secondlife/Sorbet/209/19/22
+substation.png
+
+Substation DanCan - D4
+https://maps.secondlife.com/secondlife/Apple%20Island/13/251/22
+substation.png
+
+Substation Jennilee - D4
+https://maps.secondlife.com/secondlife/Jennilee/53/175/22
+substation.png
+
+Substation Pilatus - D4
+https://maps.secondlife.com/secondlife/Pilatus/141/230/23
+substation.png
+
+Acknefar    
+https://maps.secondlife.com/secondlife/Acknefar/185/128/24
+air_station.png
+
+FSC Flight Safety
+https://maps.secondlife.com/secondlife/Rossa/131/248/21
+air_station.png
+
+ATC Aircraft Training    
+https://maps.secondlife.com/secondlife/Acknefar/153/22/24
+air_station.png
+
+STC Sail Training    
+https://maps.secondlife.com/secondlife/Venrigalli/143/28/22
+sail_station.png
+
+BTC Boat Training & Museum    
+https://maps.secondlife.com/secondlife/Egle/162/110/25
+misc_station.png
+
+DTC Dive Training    
+https://maps.secondlife.com/secondlife/Miller/207/189/82
+dive_station.png
+
+Institute of Leadership    
+https://maps.secondlife.com/secondlife/Alphubel/89/132/4002
+misc_station.png
+
+MTC Medical Training    
+https://maps.secondlife.com/secondlife/Acknefar/156/54/24
+misc_station.png
+
+LQP1 and Sea Deployment    
+https://maps.secondlife.com/secondlife/Acknefar/214/31/31
+misc_station.png
+
+RTC Recruit Training 
+https://maps.secondlife.com/secondlife/Farcastle/151/167/22
+misc_station.png
+
+Search and Rescue    
+https://maps.secondlife.com/secondlife/Acknefar/41/56/24
+misc_station.png
+
+Honor Guard    
+https://maps.secondlife.com/secondlife/Monowai/103/95/79
+misc_station.png
+
+Headquarters    
+https://maps.secondlife.com/secondlife/Alphubel/128/34/26
+misc_station.png
+
+Blackwell Media    
+https://maps.secondlife.com/secondlife/The%20Kingdom/99/86/1254
+misc_station.png
+
+Graduation Plank FRC    
+https://maps.secondlife.com/secondlife/Alphubel/83/183/23
+misc_station.png
+
+Active Retired    
+https://maps.secondlife.com/secondlife/Tenjin/157/194/28
+misc_station.png
+
+Aircraft Maintanance    
+https://maps.secondlife.com/secondlife/Acknefar/212/36/24
+air_station.png
+
+Barracks Egle    
+https://maps.secondlife.com/secondlife/Egle/197/153/22
+misc_station.png
+
+Toasted Coastie Miller    
+https://maps.secondlife.com/secondlife/Miller/147/148/83
+misc_station.png
+
+Radio Station    
+https://maps.secondlife.com/secondlife/Abbotts/50/137/33
+misc_station.png
