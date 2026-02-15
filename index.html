@@ -157,7 +157,7 @@
 
         var label_markers = [];
 
-        const floatplanner_show_grid = false;
+        const floatplanner_show_grid = true;
         const floatplanner_step_pixels = 10;
         const label_min_zoom = 0;
 
@@ -196,8 +196,6 @@
                     floatplanner_active = true;
                 }
                 refresh_labels();
-
-
             });
 
             lmap.on('overlayremove', function (e) {
@@ -207,7 +205,6 @@
 
                 }
                 refresh_labels();
-
             });
         }
 
@@ -231,9 +228,7 @@
         }
 
         function update_label_visibility() {
-
             var zoom_ok = lmap.getZoom() >= label_min_zoom;
-
             label_markers.forEach(m => {
 
                 var district_visible = lmap.hasLayer(m._district_layer);
@@ -251,9 +246,7 @@
                         m._district_layer.removeLayer(m);
                         m._visible = false;
                     }
-
                 }
-
             });
         }
 
@@ -261,12 +254,10 @@
         function reset_floatplanner() {
             debug_points.forEach(m => floatplanner_layer.removeLayer(m));
             debug_points = [];
-
             if (float_line) {
                 floatplanner_layer.removeLayer(float_line);
                 float_line = null;
             }
-
             document.getElementById("floatplanner-output").textContent = "";
         }
 
@@ -284,9 +275,7 @@
                             [station.grid_pos[1], station.grid_pos[0]],
                             { icon: icon }
                         ).addTo(lmap);
-
                         marker.stationData = station;
-
                         // Hover tooltip (now visible due to CSS patch)
                         marker.bindTooltip(
                             station.name,
