@@ -179,40 +179,25 @@
 
 
 
-        /*
-        .leaflet-marker-icon.marker-selected {
-            filter: drop-shadow(0 0 8px yellow);
-            transform: scale(1.25);
-            z-index: 1000 !important;
-        }
-        */
-        /*
-        .leaflet-marker-icon.marker-selected {
-            transform: scale(1.5);
-            filter: hue-rotate(90deg);
-        }
-*/
-        /*
-        .marker-selected img {
-            filter: drop-shadow(0 0 8px yellow);
-            transform: scale(1.25);
-            transition: 0.15s;
-        }
-*/
 
-
-
-        .leaflet-marker-icon.marker-selected {
-            /* sicherstellen, dass der Ring sichtbar ist */
-            box-shadow: 0 0 0 3px gold, 0 0 10px rgba(255, 215, 0, 0.9);
-            border-radius: 999px;
-            /* macht den Ring rund/oval */
-            z-index: 1000 !important;
-            /* nach vorne */
-        }
-
-        .resultItem.selected {
+        .selected-label {
+            background: #fff;
+            color: #000;
+            border: 1px solid #333;
             font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .selected-station-label {
+            background: #fff;
+            color: #000;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
         }
     </style>
 
@@ -234,9 +219,9 @@
 
         var label_markers = [];
 
-        const floatplanner_show_grid = true;
+        const floatplanner_show_grid = false;
         const floatplanner_step_pixels = 10;
-        const label_min_zoom = 0;
+        const label_min_zoom = 3;
 
         var debug_icon = L.divIcon({
             className: "debug-point",
@@ -364,22 +349,29 @@
                             station.name,
                             {
                                 direction: "top",
-                                sticky: true,
+                                sticky: false,
                                 opacity: 0.95
                             }
                         );
+                        marker.on("click", function (e) {
+                            if (e.originalEvent && e.originalEvent.shiftKey) {
+                                L.DomEvent.stop(e);          // completely stop Leaflet default
+                                toggle_marker_selection(marker);
+                            }
+                        });
 
-                        // Shift+Klick = markieren
+/*
                         marker.on("click", function (e) {
 
                             if (e.originalEvent.shiftKey) {
+                                if (marker.getTooltip()) marker.closeTooltip();
+                                if (marker.getPopup()) marker.closePopup();
                                 toggle_marker_selection(marker);
                                 return;
                             }
-
                             //lmap.flyTo(marker.getLatLng(), 6);
                         });
-
+*/
                         marker.bindPopup(
                             build_station_popup_html(station, marker)
                         );
@@ -398,68 +390,6 @@
                     update_result_list(all_markers);
                 });
         }
-
-
-        function xload_stations() {
-            fetch('stations.json')
-                .then(r => r.json())
-                .then(stations => {
-                    stations.forEach(station => {
-                        var icon = L.icon({
-                            iconUrl: "marker/" + station.marker,
-                            iconSize: [30, 40]
-                        });
-
-                        var marker = L.marker(
-                            [station.grid_pos[1], station.grid_pos[0]],
-                            { icon: icon }
-                        ).addTo(lmap);
-                        marker.stationData = station;
-                        // Hover tooltip (now visible due to CSS patch)
-                        marker.bindTooltip(
-                            station.name,
-                            {
-                                direction: "top",
-                                sticky: true,
-                                opacity: 0.95
-                            }
-                        );
-
-                        marker.on("click", function () {
-                            //lmap.flyTo(marker.getLatLng(), 6);
-                            lmap.setView(marker.getLatLng(), 6);
-                        });
-
-
-                        all_markers.push(marker);
-
-                        if (station.url) {
-                            marker.bindPopup(
-                                "<b>" + station.name + "</b><br>" +
-                                "<a href='" + station.url + "' target='_blank'>Teleport</a>"
-                            );
-                        }
-                    });
-
-                    update_result_list(all_markers);
-                });
-        }
-
-        function xupdate_label_scale() {
-
-            var zoom = lmap.getZoom();
-
-            var size = 14 + (zoom * 2);
-
-            size = Math.max(12, Math.min(size, 40));
-
-            var labels = document.getElementsByClassName("sector_label");
-
-            for (var i = 0; i < labels.length; i++) {
-                labels[i].style.fontSize = size + "px";
-            }
-        }
-
 
         function update_label_scale() {
 
@@ -617,6 +547,32 @@
 
         /* Marker Selection */
 
+
+        function add_selected_label(marker) {
+            if (marker._label_marker) return;
+
+            var icon = L.divIcon({
+                className: "selected-station-label",
+                html: marker.stationData.name,
+                iconSize: null,
+                iconAnchor: [45, 45]   // 15 = half of 30px marker width
+            });
+
+            marker._label_marker = L.marker(
+                marker.getLatLng(),
+                { icon: icon, interactive: false }
+            ).addTo(lmap);
+        }
+
+
+
+        function remove_selected_label(marker) {
+            if (!marker._label_marker) return;
+            lmap.removeLayer(marker._label_marker);
+            marker._label_marker = null;
+        }
+
+
         function marker_is_selected(marker) {
             return !!marker._selected;
         }
@@ -632,38 +588,24 @@
         }
 
 
-        function xapply_marker_selected_style(marker) {
-            var el = marker.getElement();
-            if (!el) return;
 
-            if (marker._selected) el.classList.add("marker-selected");
-            else el.classList.remove("marker-selected");
-        }
 
         function toggle_marker_selection(marker) {
-
             marker._selected = !marker._selected;
-
             if (marker._selected) {
-                if (!selected_markers.includes(marker))
-                    selected_markers.push(marker);
+                if (!selected_markers.includes(marker)) selected_markers.push(marker);
+                if (marker.getTooltip()) marker.unbindTooltip(); // no hover tooltip when selected
+                add_selected_label(marker);
             } else {
-                selected_markers =
-                    selected_markers.filter(m => m !== marker);
+                selected_markers = selected_markers.filter(m => m !== marker);
+                remove_selected_label(marker);
+                marker.bindTooltip(marker.stationData.name, { direction: "top", sticky: false, opacity: 0.95 });
             }
-
-            apply_marker_selected_style(marker);
-
             var visible = get_current_visible_markers();
             update_result_list(visible);
-
-            if (marker.getPopup()) {
-                marker.setPopupContent(
-                    build_station_popup_html(marker.stationData, marker)
-                );
-            }
-
+            if (marker.getPopup()) marker.setPopupContent(build_station_popup_html(marker.stationData, marker));
         }
+
 
         function clear_marker_selection() {
 
