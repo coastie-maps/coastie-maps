@@ -338,7 +338,7 @@
                                 return;
                             }
 
-                            lmap.flyTo(marker.getLatLng(), 6);
+                            //lmap.flyTo(marker.getLatLng(), 6);
                         });
 
                         marker.bindPopup(
@@ -387,7 +387,8 @@
                         );
 
                         marker.on("click", function () {
-                            lmap.flyTo(marker.getLatLng(), 6);
+                            //lmap.flyTo(marker.getLatLng(), 6);
+                            lmap.setView(marker.getLatLng(), 6);
                         });
 
 
@@ -660,8 +661,8 @@
         function build_station_popup_html(station, marker) {
 
             var btn_text = marker_is_selected(marker)
-                ? "Markierung entfernen"
-                : "Markieren";
+                ? "Remove mark"
+                : "Mark";
 
             var teleport = station.url
                 ? "<br><a href='" + station.url +
