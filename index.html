@@ -87,6 +87,7 @@
             border-radius: 6px;
         }
 
+        /*
         .leaflet-tooltip {
             position: absolute;
             padding: 4px 8px;
@@ -139,6 +140,44 @@
             border-width: 6px 6px 6px 0;
             border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
         }
+*/
+
+        .leaflet-tooltip {
+            position: absolute;
+            padding: 4px 8px;
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 650;
+            font-family: sans-serif;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .leaflet-tooltip-top:before {
+            border-width: 6px 6px 0 6px;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .leaflet-tooltip-bottom:before {
+            border-width: 0 6px 6px 6px;
+            border-color: transparent transparent #fff transparent;
+        }
+
+        .leaflet-tooltip-left:before {
+            border-width: 6px 0 6px 6px;
+            border-color: transparent transparent transparent #fff;
+        }
+
+        .leaflet-tooltip-right:before {
+            border-width: 6px 6px 6px 0;
+            border-color: transparent #fff transparent transparent;
+        }
+
+
 
         /*
         .leaflet-marker-icon.marker-selected {
@@ -659,7 +698,6 @@
         }
 
         function build_station_popup_html(station, marker) {
-
             var btn_text = marker_is_selected(marker)
                 ? "Remove mark"
                 : "Mark";
@@ -671,12 +709,15 @@
 
             return (
                 "<b>" + station.name + "</b><br>" +
-                "<a href='#' class='js-toggle-select' " +
-                "data-marker-id='" + marker._mid + "'>" +
+                "<a href='#' class='js-zoom-marker' data-marker-id='" +
+                marker._mid + "'>Zoom to marker</a><br>" +
+                "<a href='#' class='js-toggle-select' data-marker-id='" +
+                marker._mid + "'>" +
                 btn_text + "</a>" +
                 teleport
             );
         }
+
 
 
         /* floatplanner */
@@ -839,11 +880,11 @@
                 }
             }
             if (e.key === "m" || e.key === "M") {
-
                 if (selected_markers.length === 0) return;
-
                 var group = L.featureGroup(selected_markers);
                 lmap.fitBounds(group.getBounds());
+                var z = lmap.getZoom();
+                lmap.setZoom(z - 1);
             }
 
             if (e.key === "x" || e.key === "X") {
@@ -861,6 +902,18 @@
             if (!marker) return;
             toggle_marker_selection(marker);
         });
+
+        document.addEventListener("click", function (e) {
+            var target = e.target;
+            if (!target.classList.contains("js-zoom-marker"))
+                return;
+            e.preventDefault();
+            var mid = target.getAttribute("data-marker-id");
+            var marker = all_markers.find(m => m._mid === mid);
+            if (!marker) return;
+            lmap.setView(marker.getLatLng(), 6);
+        });
+
     </script>
 </head>
 
