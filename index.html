@@ -139,11 +139,49 @@
             border-width: 6px 6px 6px 0;
             border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
         }
+
+        /*
+        .leaflet-marker-icon.marker-selected {
+            filter: drop-shadow(0 0 8px yellow);
+            transform: scale(1.25);
+            z-index: 1000 !important;
+        }
+        */
+        /*
+        .leaflet-marker-icon.marker-selected {
+            transform: scale(1.5);
+            filter: hue-rotate(90deg);
+        }
+*/
+        /*
+        .marker-selected img {
+            filter: drop-shadow(0 0 8px yellow);
+            transform: scale(1.25);
+            transition: 0.15s;
+        }
+*/
+
+
+
+        .leaflet-marker-icon.marker-selected {
+            /* sicherstellen, dass der Ring sichtbar ist */
+            box-shadow: 0 0 0 3px gold, 0 0 10px rgba(255, 215, 0, 0.9);
+            border-radius: 999px;
+            /* macht den Ring rund/oval */
+            z-index: 1000 !important;
+            /* nach vorne */
+        }
+
+        .resultItem.selected {
+            font-weight: bold;
+        }
     </style>
 
     <script>
 
         var all_markers = [];
+        var selected_markers = [];
+
         var lmap = null;
 
         var debug_points = [];
@@ -262,6 +300,68 @@
         }
 
         function load_stations() {
+
+            fetch('stations.json')
+                .then(r => r.json())
+                .then(stations => {
+
+                    stations.forEach(station => {
+
+                        var icon = L.icon({
+                            iconUrl: "marker/" + station.marker,
+                            iconSize: [30, 40]
+                        });
+
+                        var marker = L.marker(
+                            [station.grid_pos[1], station.grid_pos[0]],
+                            { icon: icon }
+                        ).addTo(lmap);
+
+                        marker.stationData = station;
+                        marker._selected = false;
+                        marker._mid = "m" + all_markers.length;
+
+                        marker.bindTooltip(
+                            station.name,
+                            {
+                                direction: "top",
+                                sticky: true,
+                                opacity: 0.95
+                            }
+                        );
+
+                        // Shift+Klick = markieren
+                        marker.on("click", function (e) {
+
+                            if (e.originalEvent.shiftKey) {
+                                toggle_marker_selection(marker);
+                                return;
+                            }
+
+                            lmap.flyTo(marker.getLatLng(), 6);
+                        });
+
+                        marker.bindPopup(
+                            build_station_popup_html(station, marker)
+                        );
+
+                        marker.on("add", function () {
+                            apply_marker_selected_style(marker);
+                        });
+
+                        marker.on("popupopen", function () {
+                            apply_marker_selected_style(marker);
+                        });
+
+                        all_markers.push(marker);
+                    });
+
+                    update_result_list(all_markers);
+                });
+        }
+
+
+        function xload_stations() {
             fetch('stations.json')
                 .then(r => r.json())
                 .then(stations => {
@@ -433,6 +533,20 @@
 
             list.innerHTML = "";
 
+            markers = markers.slice().sort((a, b) => {
+
+                var sa = marker_is_selected(a) ? 1 : 0;
+                var sb = marker_is_selected(b) ? 1 : 0;
+
+                if (sa !== sb) return sb - sa;
+
+                var an = (a.stationData.name || "").toLowerCase();
+                var bn = (b.stationData.name || "").toLowerCase();
+
+                return an.localeCompare(bn);
+            });
+
+
             if (search.length === 0) {
                 list.style.display = "none";
                 return;
@@ -451,9 +565,118 @@
                     if (marker.getPopup && marker.getPopup()) marker.openPopup();
                 };
 
+                if (marker_is_selected(marker)) {
+                    div.classList.add("selected");
+                    div.textContent = "★ " + div.textContent;
+                }
+
+
                 list.appendChild(div);
             });
         }
+
+        /* Marker Selection */
+
+        function marker_is_selected(marker) {
+            return !!marker._selected;
+        }
+
+        function apply_marker_selected_style(marker) {
+            var el = marker.getElement();
+            if (!el) return;
+
+            if (marker._selected)
+                el.classList.add("marker-selected");
+            else
+                el.classList.remove("marker-selected");
+        }
+
+
+        function xapply_marker_selected_style(marker) {
+            var el = marker.getElement();
+            if (!el) return;
+
+            if (marker._selected) el.classList.add("marker-selected");
+            else el.classList.remove("marker-selected");
+        }
+
+        function toggle_marker_selection(marker) {
+
+            marker._selected = !marker._selected;
+
+            if (marker._selected) {
+                if (!selected_markers.includes(marker))
+                    selected_markers.push(marker);
+            } else {
+                selected_markers =
+                    selected_markers.filter(m => m !== marker);
+            }
+
+            apply_marker_selected_style(marker);
+
+            var visible = get_current_visible_markers();
+            update_result_list(visible);
+
+            if (marker.getPopup()) {
+                marker.setPopupContent(
+                    build_station_popup_html(marker.stationData, marker)
+                );
+            }
+
+        }
+
+        function clear_marker_selection() {
+
+            selected_markers.forEach(m => {
+                m._selected = false;
+                apply_marker_selected_style(m);
+            });
+
+            selected_markers = [];
+
+            var visible = get_current_visible_markers();
+            update_result_list(visible);
+        }
+
+        function get_current_visible_markers() {
+
+            var search = document.getElementById("searchBox")
+                .value.toLowerCase().trim();
+
+            if (search.length === 0)
+                return all_markers.slice();
+
+            return all_markers.filter(marker => {
+                var name = (marker.stationData.name || "")
+                    .toLowerCase();
+                var region = (marker.stationData.region || "")
+                    .toLowerCase();
+
+                return name.includes(search)
+                    || region.includes(search);
+            });
+        }
+
+        function build_station_popup_html(station, marker) {
+
+            var btn_text = marker_is_selected(marker)
+                ? "Markierung entfernen"
+                : "Markieren";
+
+            var teleport = station.url
+                ? "<br><a href='" + station.url +
+                "' target='_blank'>Teleport</a>"
+                : "";
+
+            return (
+                "<b>" + station.name + "</b><br>" +
+                "<a href='#' class='js-toggle-select' " +
+                "data-marker-id='" + marker._mid + "'>" +
+                btn_text + "</a>" +
+                teleport
+            );
+        }
+
 
         /* floatplanner */
 
@@ -614,9 +837,29 @@
                     export_floatplanner_points();
                 }
             }
+            if (e.key === "m" || e.key === "M") {
 
+                if (selected_markers.length === 0) return;
+
+                var group = L.featureGroup(selected_markers);
+                lmap.fitBounds(group.getBounds());
+            }
+
+            if (e.key === "x" || e.key === "X") {
+                clear_marker_selection();
+            }
         });
 
+        document.addEventListener("click", function (e) {
+            var target = e.target;
+            if (!target.classList.contains("js-toggle-select"))
+                return;
+            e.preventDefault();
+            var mid = target.getAttribute("data-marker-id");
+            var marker = all_markers.find(m => m._mid === mid);
+            if (!marker) return;
+            toggle_marker_selection(marker);
+        });
     </script>
 </head>
 
