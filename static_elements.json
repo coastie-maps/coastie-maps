@@ -1,6 +1,35 @@
 {
   "areas": [
     {
+      "name": "NOTAM Snug Seas blocked to group",
+      "color": "#ff0000",
+      "fill_opacity": 0.5,
+      "stroke_opacity": 1.0,
+      "weight": 2.0,
+      "coords": [
+        [
+          1149.0,
+          1052.0
+        ],
+        [
+          1149.0,
+          1051.0
+        ],
+        [
+          1150.0,
+          1051.0
+        ],
+        [
+          1150.0,
+          1052.0
+        ],
+        [
+          1149.0,
+          1052.0
+        ]
+      ]
+    },
+    {
       "name": "No military D3",
       "color": "#ff0000",
       "fill_opacity": 0.5,
