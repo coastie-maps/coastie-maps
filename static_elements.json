@@ -131,6 +131,16 @@
   "labels": [],
   "images": [
     {
+      "file": "images/notams.png",
+      "bounds": [
+        1149.0,
+        1051.0,
+        1150.0,
+        1052.0
+      ],
+      "opacity": 1.0
+    },
+    {
       "file": "images/restricted-no-military-vessels-allowed.png",
       "bounds": [
         1141.0,
