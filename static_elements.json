@@ -128,7 +128,38 @@
       ]
     }
   ],
-  "labels": [],
+  "labels": [
+    {
+      "pos": [
+        1109.0,
+        1036.0
+      ],
+      "text": "SATORI",
+      "size": 24.0,
+      "color": "#ffff00",
+      "minzoom": 3
+    },
+    {
+      "pos": [
+        1134.0,
+        1092.0
+      ],
+      "text": "CORSICA",
+      "size": 24.0,
+      "color": "#ffff00",
+      "minzoom": 3
+    },
+    {
+      "pos": [
+        1171.0,
+        1092.0
+      ],
+      "text": "GAETA V",
+      "size": 24.0,
+      "color": "#ffff00",
+      "minzoom": 3
+    }
+  ],
   "images": [
     {
       "file": "images/notams.png",

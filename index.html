@@ -24,11 +24,13 @@
             z-index: 1000;
             top: 10px;
             left: 80px;
-            background: white;
+            //background: white;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
             padding: 8px;
             border-radius: 6px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            width: 260px;
+            width: 300px;
             font-family: sans-serif;
             font-size: 14px;
         }
@@ -38,6 +40,8 @@
             padding: 4px;
             margin-bottom: 6px;
             box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
         }
 
         #resultList {
@@ -448,7 +452,7 @@
             var icon = document.getElementById("jump-toggle");
             box.classList.toggle("collapsed");
             if (box.classList.contains("collapsed")) {
-                icon.textContent = "▸";
+                icon.textContent = "▴";
             } else {
                 icon.textContent = "▾";
             }
@@ -634,11 +638,25 @@
                 return an.localeCompare(bn);
             });
 
+            /*
+                        if (search.length === 0) {
+                            list.style.display = "none";
+                            return;
+                        }
+            */
 
             if (search.length === 0) {
-                list.style.display = "none";
-                return;
+                var selected = markers.filter(m => marker_is_selected(m));
+                if (selected.length === 0) {
+                    list.style.display = "none";
+                    return;
+                }
+                list.style.display = "block";
+                markers = selected;
+            } else {
+                list.style.display = "block";
             }
+
 
             list.style.display = "block";
 
@@ -981,8 +999,11 @@
         <input type="text" id="searchBox" placeholder="Search...">
         <div id="resultList"></div>
     </div>
-    <div id="jump-container">
-        <div id="jump-title">Bookmarks</div>
+    <div id="jump-container" class="collapsed">
+        <div id="jump-title">
+            <span>Bookmarks</span>
+            <span id="jump-toggle">▴</span>
+        </div>
         <div id="jumpList"></div>
     </div>
     <div id="floatplanner-output"></div>
