@@ -94,60 +94,7 @@
             border-radius: 6px;
         }
 
-        /*
-        .leaflet-tooltip {
-            position: absolute;
-            padding: 4px 8px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            border-radius: 4px;
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 650;
-            font-family: sans-serif;
-            font-size: 12px;
-        }
 
-        .leaflet-tooltip:before {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-style: solid;
-        }
-
-        .leaflet-tooltip-top:before {
-            bottom: -6px;
-            left: 50%;
-            margin-left: -6px;
-            border-width: 6px 6px 0 6px;
-            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
-        }
-
-        .leaflet-tooltip-bottom:before {
-            top: -6px;
-            left: 50%;
-            margin-left: -6px;
-            border-width: 0 6px 6px 6px;
-            border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
-        }
-
-        .leaflet-tooltip-left:before {
-            right: -6px;
-            top: 50%;
-            margin-top: -6px;
-            border-width: 6px 0 6px 6px;
-            border-color: transparent transparent transparent rgba(0, 0, 0, 0.8);
-        }
-
-        .leaflet-tooltip-right:before {
-            left: -6px;
-            top: 50%;
-            margin-top: -6px;
-            border-width: 6px 6px 6px 0;
-            border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
-        }
-*/
 
         .leaflet-tooltip {
             position: absolute;
@@ -206,6 +153,74 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             pointer-events: none;
         }
+
+        /*
+        #jump-container {
+            position: absolute;
+            z-index: 1000;
+            top: 10px;
+            left: 360px;
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            width: 260px;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+*/
+
+        #jump-container {
+            position: absolute;
+            z-index: 1000;
+            bottom: 10px;
+            right: 10px;
+            top: auto;
+            left: auto;
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            width: 260px;
+            font-family: sans-serif;
+            font-size: 14px;
+            max-height: 40%;
+            overflow-y: auto;
+
+        }
+
+
+        #jump-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #jump-toggle {
+            font-size: 14px;
+        }
+
+        #jump-container.collapsed #jumpList {
+            display: none;
+        }
+
+        #jumpList {
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .jumpItem {
+            cursor: pointer;
+            padding: 3px 4px;
+            border-radius: 4px;
+        }
+
+        .jumpItem:hover {
+            background: #eee;
+        }
     </style>
 
     <script>
@@ -227,9 +242,9 @@
         var static_label_layer = L.layerGroup();
         var static_image_layer = L.layerGroup();
         var static_label_markers = [];
-
-
         var label_markers = [];
+        var jump_items = [];
+
 
         const floatplanner_show_grid = true;
         const floatplanner_step_pixels = 10;
@@ -243,6 +258,8 @@
         function loadmap() {
             lmap = new SLMap(document.getElementById('map-container'));
             lmap.setView([1012, 1076], 2);
+            //lmap.setView([1016, 1095], 2);
+
             load_stations();
             load_sectors();
             load_static_elements();
@@ -253,7 +270,6 @@
             */
             static_image_layer.addTo(lmap);
             static_area_layer.addTo(lmap);
-
             static_label_layer.addTo(lmap);
             lmap.on("click", function (e) {
                 if (floatplanner_active) {
@@ -281,6 +297,10 @@
                 }
                 refresh_labels();
             });
+            load_jump_points();
+
+            document.getElementById("jump-title")
+                .addEventListener("click", toggle_jump_container);
         }
 
         function refresh_labels() {
@@ -385,6 +405,55 @@
                 });
         }
 
+        /* Jump Box */
+
+        function load_jump_points() {
+            fetch('jump_points.json')
+                .then(r => r.json())
+                .then(data => {
+                    set_jump_items(data.map(function (j) {
+                        return { name: j.name, latlng: [j.pos[1], j.pos[0]], zoom: j.zoom };
+                    }));
+                });
+        }
+
+        function set_jump_items(items) {
+            jump_items = items || [];
+            render_jump_list();
+        }
+
+        function render_jump_list() {
+            var list = document.getElementById("jumpList");
+            list.innerHTML = "";
+            jump_items.forEach(function (it) {
+                var div = document.createElement("div");
+                div.className = "jumpItem";
+                div.textContent = it.name;
+                div.onclick = function () {
+                    //lmap.setView(it.latlng, it.zoom || 4);
+                    lmap.flyTo(it.latlng, it.zoom || 4, { duration: 2.5 });
+                };
+                list.appendChild(div);
+            });
+        }
+
+        function jump_to_item(it) {
+            if (it.kind === "point") {
+                lmap.setView(it.latlng, it.zoom || 4);
+            }
+        }
+
+        function toggle_jump_container() {
+            var box = document.getElementById("jump-container");
+            var icon = document.getElementById("jump-toggle");
+            box.classList.toggle("collapsed");
+            if (box.classList.contains("collapsed")) {
+                icon.textContent = "▸";
+            } else {
+                icon.textContent = "▾";
+            }
+        }
+
         function update_label_scale() {
             var zoom = lmap.getZoom();
             var base_size = 14 + (zoom * 2);
@@ -396,14 +465,20 @@
             static_label_markers.forEach(function (marker) {
                 var el = marker.getElement();
                 if (!el) return;
-                var size = marker._base_size + (zoom * 2);
-                size = Math.max(10, Math.min(size, 60));
+                var zoom = lmap.getZoom();
+                if (zoom < marker._minzoom) {
+                    el.style.display = "none";
+                    return;
+                }
+                el.style.display = "block";
+                var factor = Math.pow(1.25, zoom - 4);
+                var size = marker._base_size * factor;
+                size = Math.max(8, Math.min(size, 80));
                 el.style.fontSize = size + "px";
                 if (marker._color) el.style.color = marker._color;
             });
+
         }
-
-
 
         function load_sectors() {
             fetch('sectors.json')
@@ -454,8 +529,6 @@
                     update_label_visibility();
                     update_label_scale();
                 });
-
-
         }
 
         function load_static_elements() {
@@ -487,6 +560,7 @@
                             var marker = L.marker([lbl.pos[1], lbl.pos[0]], { icon: icon, interactive: false });
                             marker._base_size = lbl.size || 14;
                             marker._color = lbl.color || null;
+                            marker._minzoom = lbl.minzoom || 0;
                             marker.addTo(static_label_layer);
                             static_label_markers.push(marker);
                         });
@@ -516,29 +590,6 @@
             overlays["Static Images"] = static_image_layer;
             layer_control = L.control.layers(null, overlays).addTo(lmap);
         }
-
-
-        /*
-        function update_static_label_visibility() {
-            var zoom_ok = lmap.getZoom() >= label_min_zoom;
-            static_label_markers.forEach(m => {
-                var visible = lmap.hasLayer(m._parent_layer);
-                if (zoom_ok && visible) {
-                    if (!m._visible) {
-                        m._parent_layer.addLayer(m);
-                        m._visible = true;
-                    }
-                } else {
-                    if (m._visible) {
-                        m._parent_layer.removeLayer(m);
-                        m._visible = false;
-                    }
-                }
-            });
-        }
-        */
-
-
 
         /* search */
 
@@ -726,8 +777,6 @@
                 teleport
             );
         }
-
-
 
         /* floatplanner */
 
@@ -932,9 +981,11 @@
         <input type="text" id="searchBox" placeholder="Search...">
         <div id="resultList"></div>
     </div>
-
+    <div id="jump-container">
+        <div id="jump-title">Bookmarks</div>
+        <div id="jumpList"></div>
+    </div>
     <div id="floatplanner-output"></div>
-
     <div id="map-container"></div>
 
 </body>
