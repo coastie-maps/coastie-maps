@@ -250,7 +250,7 @@
         var jump_items = [];
 
 
-        const floatplanner_show_grid = false;
+        const floatplanner_show_grid = true;
         const floatplanner_step_pixels = 10;
         const label_min_zoom = 3;
 
@@ -305,6 +305,9 @@
 
             document.getElementById("jump-title")
                 .addEventListener("click", toggle_jump_container);
+
+            draw_cruise_if_present();
+
         }
 
         function refresh_labels() {
@@ -989,6 +992,256 @@
             if (!marker) return;
             lmap.setView(marker.getLatLng(), 6);
         });
+
+        /* ===============================
+   Cruise Track Decoder (t64p)
+   8 chars per waypoint (precision mode)
+   =============================== */
+
+        const B64U = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+        function b64u_index(c) {
+            return B64U.indexOf(c);
+        }
+
+        function decode6_from_8(s) {
+            const c0 = b64u_index(s[0]), c1 = b64u_index(s[1]), c2 = b64u_index(s[2]), c3 = b64u_index(s[3]);
+            const c4 = b64u_index(s[4]), c5 = b64u_index(s[5]), c6 = b64u_index(s[6]), c7 = b64u_index(s[7]);
+            if (c0 < 0 || c1 < 0 || c2 < 0 || c3 < 0 || c4 < 0 || c5 < 0 || c6 < 0 || c7 < 0) return null;
+
+            const b0 = (c0 << 2) | (c1 >> 4);
+            const b1 = ((c1 & 15) << 4) | (c2 >> 2);
+            const b2 = ((c2 & 3) << 6) | c3;
+
+            const b3 = (c4 << 2) | (c5 >> 4);
+            const b4 = ((c5 & 15) << 4) | (c6 >> 2);
+            const b5 = ((c6 & 3) << 6) | c7;
+
+            return [b0 & 255, b1 & 255, b2 & 255, b3 & 255, b4 & 255, b5 & 255];
+        }
+
+        function decode_cruise_from_hash() {
+            const h = (location.hash || "").trim();
+            const m = h.match(/^#\/v1\/t64p\/([A-Za-z0-9\-_]+)$/);
+            if (!m) return null;
+
+            const payload = m[1];
+            if (payload.length % 8 !== 0) return null;
+
+            const pts = [];
+
+            for (let i = 0; i < payload.length; i += 8) {
+                const b = decode6_from_8(payload.slice(i, i + 8));
+                if (!b) return null;
+
+                const region_gx = (b[0] << 8) | b[1];
+                const local_x = b[2];
+                const region_gy = (b[3] << 8) | b[4];
+                const local_y = b[5];
+
+                const x = region_gx + (local_x / 256.0);
+                const y = region_gy + (local_y / 256.0);
+
+                pts.push([y, x]);
+            }
+
+            return pts;
+        }
+        /*
+                function draw_cruise_if_present() {
+                    const pts = decode_cruise_from_hash();
+                    if (!pts || pts.length < 2) return;
+        
+                    const line = L.polyline(pts, {
+                        color: "#00ffff",
+                        weight: 4
+                    }).addTo(lmap);
+        
+                    lmap.fitBounds(line.getBounds());
+                }
+        */
+
+        function xdraw_cruise_if_present() {
+            const pts = decode_cruise_from_hash();
+            if (!pts || pts.length < 1) return;
+
+            // Linie
+            const line = L.polyline(pts, {
+                color: "#00ffff",
+                weight: 4
+            }).addTo(lmap);
+
+            // kleine gelbe Kreise auf jedem Waypoint
+            pts.forEach(function (p) {
+                L.circleMarker(p, {
+                    radius: 4,
+                    color: "#000000",
+                    weight: 1,
+                    fillColor: "#ffff00",
+                    fillOpacity: 1
+                }).addTo(lmap);
+            });
+
+            if (pts.length > 1) {
+                lmap.fitBounds(line.getBounds());
+            } else {
+                lmap.setView(pts[0], 6);
+            }
+        }
+
+
+        function draw_cruise_if_present(){
+    const pts = decode_cruise_from_hash();
+    if(!pts || pts.length < 1) return;
+
+    const offsetMeters = 10;
+    const offsetUnits = offsetMeters / 256.0;
+    const occurrence = new Map();
+    const drawPts = [];
+
+    pts.forEach(function(p, index){
+        const key = Math.round(p[1] * 256) + ":" + Math.round(p[0] * 256);
+        const n = (occurrence.get(key) || 0);
+        occurrence.set(key, n + 1);
+
+        let drawPoint = [p[0], p[1]];
+
+        if(n > 0){
+            const prev = pts[index - 1] || p;
+            const next = pts[index + 1] || p;
+            const dx = next[1] - prev[1];
+            const dy = next[0] - prev[0];
+            const len = Math.sqrt(dx * dx + dy * dy);
+            if(len > 0){
+                const tx = dx / len;
+                const ty = dy / len;
+                const lx = -ty;
+                const ly = tx;
+                const scale = offsetUnits * n;
+                drawPoint = [
+                    p[0] + ly * scale,
+                    p[1] + lx * scale
+                ];
+            }
+        }
+
+        drawPts.push(drawPoint);
+    });
+
+    const line = L.polyline(drawPts, {
+        color: "#00ffff",
+        weight: 4
+    }).addTo(lmap);
+
+    drawPts.forEach(function(p, index){
+        const prev = drawPts[index - 1] || p;
+        const next = drawPts[index + 1] || p;
+        const dx = next[1] - prev[1];
+        const dy = next[0] - prev[0];
+        const len = Math.sqrt(dx * dx + dy * dy);
+
+        let nx = 0;
+        let ny = 0;
+
+        if(len > 0){
+            nx = -dy / len;
+            ny = dx / len;
+        }
+
+        const key = Math.round(pts[index][1] * 256) + ":" + Math.round(pts[index][0] * 256);
+        const count = occurrence.get(key) || 1;
+        const labelSide = (count > 1) ? 1 : -1;
+        const labelOffset = 0.08; // increased distance
+
+        const labelPoint = [
+            p[0] + ny * labelOffset * labelSide,
+            p[1] + nx * labelOffset * labelSide
+        ];
+
+        let radius = 4;
+        let fillColor = "#ffff00";
+        const strokeColor = "#000000";
+
+        if(index === 0){
+            radius = 7;
+            fillColor = "#00ff00";
+        } else if(index === drawPts.length - 1){
+            radius = 7;
+            fillColor = "#ff0000";
+        }
+
+        L.circleMarker(p, {
+            radius: radius,
+            color: strokeColor,
+            weight: 1,
+            fillColor: fillColor,
+            fillOpacity: 1
+        }).addTo(lmap);
+
+        const numberText = (index + 1 < 10) ? " " + (index + 1) : String(index + 1);
+
+        L.marker(labelPoint, {
+            icon: L.divIcon({
+                className: "",
+                html: "<div style='width:16px;height:16px;border-radius:50%;background:white;border:1px solid black;display:flex;align-items:center;justify-content:center;font-size:9px;color:black;'>" + numberText + "</div>",
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            }),
+            interactive: false
+        }).addTo(lmap);
+    });
+
+    if(drawPts.length > 1){
+        lmap.fitBounds(line.getBounds());
+    } else {
+        lmap.setView(drawPts[0], 6);
+    }
+}
+
+
+        function xxdraw_cruise_if_present() {
+            const pts = decode_cruise_from_hash();
+            if (!pts || pts.length < 1) return;
+            const line = L.polyline(pts, {
+                color: "#00ffff",
+                weight: 4
+            }).addTo(lmap);
+            pts.forEach(function (p, index) {
+                let radius = 4;
+                let fillColor = "#ffff00";
+                const strokeColor = "#000000";
+                if (index === 0) {
+                    radius = 7;
+                    fillColor = "#00ff00"; // start point
+                } else if (index === pts.length - 1) {
+                    radius = 7;
+                    fillColor = "#ff0000"; // end point
+                }
+                L.circleMarker(p, {
+                    radius: radius,
+                    color: strokeColor,
+                    weight: 1,
+                    fillColor: fillColor,
+                    fillOpacity: 1
+                }).addTo(lmap);
+                L.marker(p, {
+                    icon: L.divIcon({
+                        className: "",
+                        html: "<div style='font-size:10px;color:black;background:white;border-radius:10px;padding:1px 4px;border:1px solid black;'>" + (index + 1) + "</div>",
+                        iconSize: [20, 20],
+                        iconAnchor: [10, -6]
+                    }),
+                    interactive: false
+                }).addTo(lmap);
+            });
+            if (pts.length > 1) {
+                lmap.fitBounds(line.getBounds());
+            } else {
+                lmap.setView(pts[0], 6);
+            }
+        }
+
+
 
     </script>
 </head>
