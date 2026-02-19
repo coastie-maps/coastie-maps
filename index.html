@@ -1088,6 +1088,22 @@
                 lmap.setView(pts[0], 6);
             }
         }
+/*
+        function offset_latlng_by_pixels(map, latlng, offset_px) {
+            const p = map.latLngToContainerPoint(latlng);
+            const shifted = L.point(p.x + offset_px, p.y);
+            return map.containerPointToLatLng(shifted);
+        }
+*/
+        function get_label_offset() {
+            return 0.5;
+            const base_zoom = 2;      // Zoom where 0.5 looks good
+            const base_offset = 0.25;
+            const zoom = lmap.getZoom();
+            // Leaflet / SLMap scales 2x per zoom level
+            const scale = Math.pow(2, base_zoom - zoom);
+            return base_offset * scale + 0.5;
+        }
 
 
         function draw_cruise_if_present() {
@@ -1151,8 +1167,8 @@
                 const key = Math.round(pts[index][1] * 256) + ":" + Math.round(pts[index][0] * 256);
                 const count = occurrence.get(key) || 1;
                 const labelSide = (count > 1) ? 1 : -1;
-                const labelOffset = 0.5;
-
+                //const labelOffset = 0.5;
+                const labelOffset = get_label_offset();
                 const labelPoint = [
                     p[0] + ny * labelOffset * labelSide,
                     p[1] + nx * labelOffset * labelSide
