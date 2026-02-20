@@ -674,7 +674,7 @@
   {
     "district": "2",
     "sector": "9",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1024.0,
@@ -714,7 +714,7 @@
   {
     "district": "2",
     "sector": "6",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1021.0,
@@ -762,7 +762,7 @@
   {
     "district": "2",
     "sector": "7",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1040.0,
@@ -838,7 +838,7 @@
   {
     "district": "2",
     "sector": "8",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1033.0,
@@ -942,7 +942,7 @@
   {
     "district": "2",
     "sector": "5",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1021.0,
@@ -986,7 +986,7 @@
   {
     "district": "2",
     "sector": "1",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1018.0,
@@ -1026,7 +1026,7 @@
   {
     "district": "2",
     "sector": "2",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1018.0,
@@ -1058,7 +1058,7 @@
   {
     "district": "2",
     "sector": "4",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1025.0,
@@ -1090,7 +1090,7 @@
   {
     "district": "2",
     "sector": "10",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1040.0,
@@ -1142,7 +1142,7 @@
   {
     "district": "2",
     "sector": "3",
-    "color": "ffff00",
+    "color": "#ffff00",
     "coords": [
       [
         1018.0,
