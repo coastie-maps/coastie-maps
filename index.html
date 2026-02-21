@@ -1178,6 +1178,7 @@
                 let fillColor = "#ffff00";
                 const strokeColor = "#000000";
 
+
                 if (index === 0) {
                     radius = 7;
                     fillColor = "#00ff00";
@@ -1185,7 +1186,7 @@
                     radius = 7;
                     fillColor = "#ff0000";
                 }
-
+/*
                 L.circleMarker(p, {
                     radius: radius,
                     color: strokeColor,
@@ -1193,9 +1194,9 @@
                     fillColor: fillColor,
                     fillOpacity: 1
                 }).addTo(lmap);
-
+*/
                 const numberText = (index + 1 < 10) ? " " + (index + 1) : String(index + 1);
-
+/*
                 L.marker(labelPoint, {
                     icon: L.divIcon({
                         className: "",
@@ -1205,6 +1206,7 @@
                     }),
                     interactive: false
                 }).addTo(lmap);
+*/
             });
 
             if (drawPts.length > 1) {
