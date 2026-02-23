@@ -823,7 +823,7 @@
     "name": "Institute of Leadership",
     "url": "secondlife://Alphubel/89/132/4002",
     "region": "Alphubel",
-    "marker": "misc_station.png",
+    "marker": "ifl_station.png",
     "grid_pos": [
       1125.347656,
       1045.515625
@@ -853,7 +853,7 @@
     "name": "RTC Recruit Training",
     "url": "secondlife://Farcastle/151/167/22",
     "region": "Farcastle",
-    "marker": "misc_station.png",
+    "marker": "graduation_station.png",
     "grid_pos": [
       1110.589844,
       1093.652344
@@ -883,7 +883,7 @@
     "name": "Headquarters",
     "url": "secondlife://Alphubel/128/34/26",
     "region": "Alphubel",
-    "marker": "misc_station.png",
+    "marker": "hq_station.png",
     "grid_pos": [
       1125.5,
       1045.132812
@@ -903,7 +903,7 @@
     "name": "Graduation Plank FRC",
     "url": "secondlife://Alphubel/83/183/23",
     "region": "Alphubel",
-    "marker": "misc_station.png",
+    "marker": "graduation_station.png",
     "grid_pos": [
       1125.324219,
       1045.714844

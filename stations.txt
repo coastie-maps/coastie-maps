@@ -328,7 +328,7 @@ dive_station.png
 
 Institute of Leadership    
 https://maps.secondlife.com/secondlife/Alphubel/89/132/4002
-misc_station.png
+ifl_station.png
 
 MTC Medical Training    
 https://maps.secondlife.com/secondlife/Acknefar/156/54/24
@@ -340,7 +340,7 @@ misc_station.png
 
 RTC Recruit Training 
 https://maps.secondlife.com/secondlife/Farcastle/151/167/22
-misc_station.png
+graduation_station.png
 
 Search and Rescue    
 https://maps.secondlife.com/secondlife/Acknefar/41/56/24
@@ -352,7 +352,7 @@ misc_station.png
 
 Headquarters    
 https://maps.secondlife.com/secondlife/Alphubel/128/34/26
-misc_station.png
+hq_station.png
 
 Blackwell Media    
 https://maps.secondlife.com/secondlife/The%20Kingdom/99/86/1254
@@ -360,7 +360,7 @@ misc_station.png
 
 Graduation Plank FRC    
 https://maps.secondlife.com/secondlife/Alphubel/83/183/23
-misc_station.png
+graduation_station.png
 
 Active Retired    
 https://maps.secondlife.com/secondlife/Tenjin/157/194/28
