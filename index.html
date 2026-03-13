@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <script src="https://maps.secondlife.com/_scripts/sl.mapapi2.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maps.secondlife.com/_styles/sl.mapapi2.css">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #map-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #left-panel {
+            position: absolute;
+            z-index: 1000;
+            top: 10px;
+            left: 80px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: calc(100% - 20px);
+        }
+
+        #search-container {
+            /* background: white; */
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        #searchBox {
+            width: 100%;
+            padding: 4px;
+            margin-bottom: 6px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+        }
+
+        #resultList {
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .resultItem {
+            cursor: pointer;
+            padding: 2px 0;
+        }
+
+        .resultItem:hover {
+            background: #eee;
+        }
+
+        .debug-point {
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .sector_label {
+            font-size: 36px;
+            font-weight: bold;
+            color: yellow;
+            text-shadow:
+                -2px -2px 0 black,
+                2px -2px 0 black,
+                -2px 2px 0 black,
+                2px 2px 0 black;
+            white-space: nowrap;
+        }
+
+        .static_label {
+            font-weight: bold;
+            white-space: nowrap;
+            text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+        }
+
+
+        #floatplanner-output {
+            position: absolute;
+            bottom: 10px;
+            left: 80px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            color: #333;
+            padding: 6px 10px;
+            font-family: monospace;
+            font-size: 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+
+
+        .leaflet-tooltip {
+            position: absolute;
+            padding: 4px 8px;
+            background: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 650;
+            font-family: sans-serif;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .leaflet-tooltip-top:before {
+            border-width: 6px 6px 0 6px;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .leaflet-tooltip-bottom:before {
+            border-width: 0 6px 6px 6px;
+            border-color: transparent transparent #fff transparent;
+        }
+
+        .leaflet-tooltip-left:before {
+            border-width: 6px 0 6px 6px;
+            border-color: transparent transparent transparent #fff;
+        }
+
+        .leaflet-tooltip-right:before {
+            border-width: 6px 6px 6px 0;
+            border-color: transparent #fff transparent transparent;
+        }
+
+
+
+
+        .selected-label {
+            background: #fff;
+            color: #000;
+            border: 1px solid #333;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .selected-station-label {
+            background: #fff;
+            color: #000;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        .marker-selected {
+            filter: drop-shadow(0 0 4px #ff0) brightness(1.3);
+        }
+
+        #jump-container {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            font-family: sans-serif;
+            font-size: 14px;
+            overflow-y: auto;
+        }
+
+
+        #jump-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #jump-toggle {
+            font-size: 14px;
+        }
+
+        #jump-container.collapsed #jumpList {
+            display: none;
+        }
+
+        #jumpList {
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .jumpItem {
+            cursor: pointer;
+            padding: 3px 4px;
+            border-radius: 4px;
+        }
+
+        .jumpItem:hover {
+            background: #eee;
+        }
+
+        #coord-display {
+            position: absolute;
+            bottom: 50px;
+            left: 80px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            color: #333;
+            padding: 6px 10px;
+            font-family: monospace;
+            font-size: 14px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #coord-display.has-link {
+            cursor: pointer;
+        }
+
+        #coord-display.has-link:hover {
+            background: rgba(238, 238, 238, 0.85);
+        }
+
+        #coord-display a.slurl-link {
+            display: none;
+        }
+
+        .coord-spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #ccc;
+            border-top-color: #555;
+            border-radius: 50%;
+            animation: coord-spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes coord-spin {
+            to { transform: rotate(360deg); }
+        }
+
+
+        .click-marker {
+            width: 14px;
+            height: 14px;
+            position: relative;
+        }
+
+        .click-marker::before,
+        .click-marker::after {
+            content: "";
+            position: absolute;
+            background: #e00;
+        }
+
+        .click-marker.void::before,
+        .click-marker.void::after {
+            background: #888;
+        }
+
+        .click-marker::before {
+            width: 2px;
+            height: 100%;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .click-marker::after {
+            width: 100%;
+            height: 2px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+    </style>
+
+    <script>
+
+        var all_markers = [];
+        var selected_markers = [];
+
+        var lmap = null;
+
+        var debug_points = [];
+        var float_line = null;
+
+        var floatplanner_layer = L.layerGroup();
+        var floatplanner_active = false;
+
+        var district_layers = {};
+        var layer_control = null;
+        var static_area_layer = L.layerGroup();
+        var static_label_layer = L.layerGroup();
+        var static_image_layer = L.layerGroup();
+        var static_label_markers = [];
+        var label_markers = [];
+        var jump_items = [];
+        var navigation_link_mode = false;
+
+
+        const floatplanner_show_grid = false;
+        const floatplanner_step_pixels = 10;
+        const label_min_zoom = 3;
+
+        var debug_icon = L.divIcon({
+            className: "debug-point",
+            iconSize: [10, 10]
+        });
+
+        var click_icon = L.divIcon({
+            className: "click-marker",
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+        var click_marker = null;
+        var region_rect = null;
+
+        function loadmap() {
+            lmap = new SLMap(document.getElementById('map-container'));
+            lmap.setView([1012, 1076], 2);
+            //lmap.setView([1016, 1095], 2);
+
+            load_map_data();
+            /*
+            static_area_layer.eachLayer(function (layer) {
+                if (layer.bringToBack) layer.bringToBack();
+            });
+            */
+            static_image_layer.addTo(lmap);
+            static_area_layer.addTo(lmap);
+            static_label_layer.addTo(lmap);
+            lmap.on("click", function (e) {
+                if (floatplanner_active) {
+                    create_debug_point(e.latlng);
+                }
+                show_click_position(e.latlng);
+            });
+            lmap.on("zoomend", refresh_labels);
+            document.getElementById("searchBox")
+                .addEventListener("input", filter_markers);
+
+            layer_control = L.control.layers(
+                null,
+                { "Floatplanner": floatplanner_layer },
+                { position: 'topleft' }
+            ).addTo(lmap);
+            lmap.on('overlayadd', function (e) {
+                if (e.layer === floatplanner_layer) {
+                    floatplanner_active = true;
+                }
+                refresh_labels();
+            });
+            lmap.on('overlayremove', function (e) {
+                if (e.layer === floatplanner_layer) {
+                    floatplanner_active = false;
+                    reset_floatplanner();
+                }
+                refresh_labels();
+            });
+            load_bookmarks();
+
+            document.getElementById("jump-title")
+                .addEventListener("click", toggle_jump_container);
+
+            lmap.on("moveend", update_url_hash);
+
+            load_region_reverse();
+            apply_hash_view();
+            draw_cruise_if_present();
+
+        }
+
+        function refresh_labels() {
+            update_label_visibility();
+            update_label_scale();
+            //update_static_label_visibility();
+        }
+
+        function update_label_visibility() {
+            var zoom_ok = lmap.getZoom() >= label_min_zoom;
+            label_markers.forEach(m => {
+
+                var district_visible = lmap.hasLayer(m._district_layer);
+
+                if (zoom_ok && district_visible) {
+
+                    if (!m._visible) {
+                        m._district_layer.addLayer(m);
+                        m._visible = true;
+                    }
+
+                } else {
+
+                    if (m._visible) {
+                        m._district_layer.removeLayer(m);
+                        m._visible = false;
+                    }
+                }
+            });
+        }
+
+
+        function reset_floatplanner() {
+            debug_points.forEach(m => floatplanner_layer.removeLayer(m));
+            debug_points = [];
+            if (float_line) {
+                floatplanner_layer.removeLayer(float_line);
+                float_line = null;
+            }
+            document.getElementById("floatplanner-output").textContent = "";
+        }
+
+        function load_map_data() {
+            fetch('map_data.json')
+                .then(r => r.json())
+                .then(data => {
+                    load_stations(data.stations);
+                    load_bookmarks(data.bookmarks);
+                    load_sectors(data.sectors);
+                    load_static_elements(data.areas, data.images, data.labels);
+                });
+        }
+
+        function load_stations(stations) {
+            stations.forEach(station => {
+                var icon = L.icon({
+                    iconUrl: "images/" + station.marker,
+                    iconSize: [20, 30]
+                });
+                var marker = L.marker(
+                    [station.grid_pos[1], station.grid_pos[0]],
+                    { icon: icon }
+                ).addTo(lmap);
+                marker.stationData = station;
+                marker._selected = false;
+                marker._mid = "m" + all_markers.length;
+                marker.bindTooltip(station.name, {
+                    direction: "top",
+                    sticky: false,
+                    opacity: 0.95
+                });
+                marker.on("click", function (e) {
+                    if (e.originalEvent && e.originalEvent.shiftKey) {
+                        L.DomEvent.stop(e);
+                        toggle_marker_selection(marker);
+                    }
+                });
+                marker.bindPopup(build_station_popup_html(station, marker));
+                marker.on("add", function () { apply_marker_selected_style(marker); });
+                marker.on("popupopen", function () { apply_marker_selected_style(marker); });
+                all_markers.push(marker);
+            });
+            update_result_list(all_markers);
+        }
+
+        /* Jump Box */
+
+        function load_jump_points(data) {
+            set_jump_items(data.map(function (j) {
+                return { name: j.name, latlng: [j.pos[1], j.pos[0]], zoom: j.zoom };
+            }));
+        }
+
+        function set_jump_items(items) {
+            jump_items = items || [];
+            render_jump_list();
+        }
+
+        function render_jump_list() {
+            var list = document.getElementById("jumpList");
+            list.innerHTML = "";
+            jump_items.forEach(function (it) {
+                var div = document.createElement("div");
+                div.className = "jumpItem";
+                div.textContent = it.name;
+                div.onclick = function () {
+                    //lmap.setView(it.latlng, it.zoom || 4);
+                    lmap.flyTo(it.latlng, it.zoom || 4, { duration: 2.5 });
+                };
+                list.appendChild(div);
+            });
+        }
+
+        function toggle_jump_container() {
+            var box = document.getElementById("jump-container");
+            var icon = document.getElementById("jump-toggle");
+            box.classList.toggle("collapsed");
+            if (box.classList.contains("collapsed")) {
+                icon.textContent = "▴";
+            } else {
+                icon.textContent = "▾";
+            }
+        }
+
+        function update_label_scale() {
+            var zoom = lmap.getZoom();
+            var base_size = 14 + (zoom * 2);
+            base_size = Math.max(12, Math.min(base_size, 40));
+            label_markers.forEach(function (marker) {
+                var el = marker.getElement();
+                if (el) el.style.fontSize = base_size + "px";
+            });
+            static_label_markers.forEach(function (marker) {
+                var el = marker.getElement();
+                if (!el) return;
+                var zoom = lmap.getZoom();
+                if (zoom < marker._minzoom) {
+                    el.style.display = "none";
+                    return;
+                }
+                el.style.display = "block";
+                var factor = Math.pow(1.25, zoom - 4);
+                var size = marker._base_size * factor;
+                size = Math.max(8, Math.min(size, 80));
+                el.style.fontSize = size + "px";
+                if (marker._color) el.style.color = marker._color;
+            });
+
+        }
+
+        function load_sectors(sectors) {
+            district_layers = {};
+            label_markers = [];
+            sectors.forEach(sec => {
+                if (!district_layers[sec.district]) {
+                    district_layers[sec.district] = L.layerGroup().addTo(lmap);
+                }
+                var layer = district_layers[sec.district];
+                var latlngs = sec.coords.map(p => [p[1], p[0]]);
+                var polygon = L.polygon(latlngs, {
+                    color: sec.color,
+                    weight: 1,
+                    fillOpacity: 0
+                });
+                layer.addLayer(polygon);
+                if (sec.labels) {
+                    sec.labels.forEach(lbl => {
+                        var label_icon = L.divIcon({
+                            className: "sector_label",
+                            html: lbl.text,
+                            iconSize: [0, 0]
+                        });
+                        var label_marker = L.marker(
+                            [lbl.pos[1], lbl.pos[0]],
+                            { icon: label_icon, draggable: floatplanner_active }
+                        );
+                        label_marker._visible = true;
+                        label_marker._district_layer = layer;
+                        layer.addLayer(label_marker);
+                        label_markers.push(label_marker);
+                    });
+                }
+            });
+            rebuild_layer_control();
+            update_label_visibility();
+            update_label_scale();
+        }
+
+        function load_static_elements(areas, images, labels) {
+            static_area_layer.clearLayers();
+            static_label_layer.clearLayers();
+            static_label_markers = [];
+            if (areas) {
+                areas.forEach(function (area) {
+                    var latlngs = area.coords.map(function (p) { return [p[1], p[0]]; });
+                    var polygon = L.polygon(latlngs, {
+                        color: area.color || "#00ffff",
+                        opacity: (area.stroke_opacity !== undefined ? area.stroke_opacity : 1),
+                        weight: (area.weight !== undefined ? area.weight : 2),
+                        fillOpacity: (area.fill_opacity !== undefined ? area.fill_opacity : 0.15)
+                    });
+                    static_area_layer.addLayer(polygon);
+                });
+            }
+            if (labels) {
+                labels.forEach(function (lbl) {
+                    var icon = L.divIcon({
+                        className: "static_label",
+                        html: lbl.text,
+                        iconSize: [0, 0]
+                    });
+                    var marker = L.marker([lbl.pos[1], lbl.pos[0]], { icon: icon, interactive: false });
+                    marker._base_size = lbl.size || 14;
+                    marker._color = lbl.color || null;
+                    marker._minzoom = lbl.minzoom || 0;
+                    marker.addTo(static_label_layer);
+                    static_label_markers.push(marker);
+                });
+            }
+            if (images) {
+                images.forEach(function (img) {
+                    var b = img.bounds;
+                    var leaflet_bounds = [[b[1], b[0]], [b[3], b[2]]];
+                    var overlay = L.imageOverlay(img.file, leaflet_bounds, { opacity: img.opacity || 1 });
+                    static_image_layer.addLayer(overlay);
+                });
+            }
+            update_label_scale();
+        }
+
+
+        function rebuild_layer_control() {
+            if (layer_control) layer_control.remove();
+            var overlays = {};
+            for (var d in district_layers) {
+                overlays["District " + d] = district_layers[d];
+            }
+            overlays["Static Areas"] = static_area_layer;
+            overlays["Static Labels"] = static_label_layer;
+            overlays["Floatplanner"] = floatplanner_layer;
+            overlays["Static Images"] = static_image_layer;
+            layer_control = L.control.layers(null, overlays, { position: 'topleft' }).addTo(lmap);
+        }
+
+        /* search */
+
+        function filter_markers() {
+
+            var search = document.getElementById("searchBox").value.toLowerCase().trim();
+            var visible = [];
+
+            all_markers.forEach(marker => {
+
+                var name = (marker.stationData.name || "").toLowerCase();
+                var region = (marker.stationData.region || "").toLowerCase();
+
+                if (search.length === 0 || name.includes(search) || region.includes(search)) {
+                    if (!lmap.hasLayer(marker)) marker.addTo(lmap);
+                    visible.push(marker);
+                } else {
+                    if (lmap.hasLayer(marker)) lmap.removeLayer(marker);
+                }
+            });
+
+            update_result_list(visible);
+        }
+
+        function update_result_list(markers) {
+
+            var list = document.getElementById("resultList");
+            var search = document.getElementById("searchBox").value.trim();
+
+            list.innerHTML = "";
+
+            markers = markers.slice().sort((a, b) => {
+
+                var sa = marker_is_selected(a) ? 1 : 0;
+                var sb = marker_is_selected(b) ? 1 : 0;
+
+                if (sa !== sb) return sb - sa;
+
+                var an = (a.stationData.name || "").toLowerCase();
+                var bn = (b.stationData.name || "").toLowerCase();
+
+                return an.localeCompare(bn);
+            });
+
+            /*
+                        if (search.length === 0) {
+                            list.style.display = "none";
+                            return;
+                        }
+            */
+
+            if (search.length === 0) {
+                var selected = markers.filter(m => marker_is_selected(m));
+                if (selected.length === 0) {
+                    list.style.display = "none";
+                    return;
+                }
+                list.style.display = "block";
+                markers = selected;
+            } else {
+                list.style.display = "block";
+            }
+
+            markers.forEach(marker => {
+
+                var div = document.createElement("div");
+                div.className = "resultItem";
+                div.textContent = marker.stationData.name;
+
+                div.onclick = function () {
+                    lmap.setView(marker.getLatLng(), 6);
+                    if (marker.getPopup && marker.getPopup()) marker.openPopup();
+                };
+
+                if (marker_is_selected(marker)) {
+                    div.classList.add("selected");
+                    div.textContent = "★ " + div.textContent;
+                }
+
+
+                list.appendChild(div);
+            });
+        }
+
+        /* Marker Selection */
+
+
+        function add_selected_label(marker) {
+            if (marker._label_marker) return;
+
+            var icon = L.divIcon({
+                className: "selected-station-label",
+                html: marker.stationData.name,
+                iconSize: null,
+                iconAnchor: [45, 45]   // 15 = half of 30px marker width
+            });
+
+            marker._label_marker = L.marker(
+                marker.getLatLng(),
+                { icon: icon, interactive: false }
+            ).addTo(lmap);
+        }
+
+
+
+        function remove_selected_label(marker) {
+            if (!marker._label_marker) return;
+            lmap.removeLayer(marker._label_marker);
+            marker._label_marker = null;
+        }
+
+
+        function marker_is_selected(marker) {
+            return !!marker._selected;
+        }
+
+        function apply_marker_selected_style(marker) {
+            var el = marker.getElement();
+            if (!el) return;
+
+            if (marker._selected)
+                el.classList.add("marker-selected");
+            else
+                el.classList.remove("marker-selected");
+        }
+
+
+
+
+        function toggle_marker_selection(marker) {
+            marker._selected = !marker._selected;
+            if (marker._selected) {
+                if (!selected_markers.includes(marker)) selected_markers.push(marker);
+                if (marker.getTooltip()) marker.unbindTooltip(); // no hover tooltip when selected
+                add_selected_label(marker);
+            } else {
+                selected_markers = selected_markers.filter(m => m !== marker);
+                remove_selected_label(marker);
+                marker.bindTooltip(marker.stationData.name, { direction: "top", sticky: false, opacity: 0.95 });
+            }
+            var visible = get_current_visible_markers();
+            update_result_list(visible);
+            if (marker.getPopup()) marker.setPopupContent(build_station_popup_html(marker.stationData, marker));
+        }
+
+
+        function clear_marker_selection() {
+
+            selected_markers.forEach(m => {
+                m._selected = false;
+                apply_marker_selected_style(m);
+            });
+
+            selected_markers = [];
+
+            var visible = get_current_visible_markers();
+            update_result_list(visible);
+        }
+
+        function get_current_visible_markers() {
+
+            var search = document.getElementById("searchBox")
+                .value.toLowerCase().trim();
+
+            if (search.length === 0)
+                return all_markers.slice();
+
+            return all_markers.filter(marker => {
+                var name = (marker.stationData.name || "")
+                    .toLowerCase();
+                var region = (marker.stationData.region || "")
+                    .toLowerCase();
+
+                return name.includes(search)
+                    || region.includes(search);
+            });
+        }
+
+        function build_station_popup_html(station, marker) {
+            var btn_text = marker_is_selected(marker)
+                ? "Remove mark"
+                : "Mark";
+
+            var teleport = station.url
+                ? "<br><a href='" + station.url +
+                "' target='_blank'>Teleport</a>"
+                : "";
+
+            return (
+                "<b>" + station.name + "</b><br>" +
+                "<a href='#' class='js-zoom-marker' data-marker-id='" +
+                marker._mid + "'>Zoom to marker</a><br>" +
+                "<a href='#' class='js-toggle-select' data-marker-id='" +
+                marker._mid + "'>" +
+                btn_text + "</a>" +
+                teleport
+            );
+        }
+
+        /* floatplanner */
+
+        function create_debug_point(latlng) {
+
+            var marker = L.marker(latlng, {
+                draggable: true,
+                icon: debug_icon
+            }).addTo(floatplanner_layer);
+
+            if (floatplanner_show_grid) {
+                marker.bindTooltip(
+                    Math.round(latlng.lng) + " " + Math.round(latlng.lat),
+                    { permanent: true }
+                );
+            }
+
+            marker.on("dragend", update_float_line);
+
+            debug_points.push(marker);
+            update_float_line();
+        }
+
+        function update_float_line() {
+
+            if (float_line) {
+                floatplanner_layer.removeLayer(float_line);
+            }
+
+            if (debug_points.length < 2) {
+                document.getElementById("floatplanner-output").textContent = "";
+                return;
+            }
+
+            var latlngs = debug_points.map(m => m.getLatLng());
+
+            float_line = L.polyline(latlngs, {
+                color: "#ff0000",
+                weight: 2
+            }).addTo(floatplanner_layer);
+
+            compute_float_string(latlngs);
+        }
+
+        function format_direction_string(str) {
+
+            if (!str || str.length === 0) return "";
+
+            let result = [];
+            let current = str[0];
+            let count = 1;
+
+            for (let i = 1; i < str.length; i++) {
+                if (str[i] === current) {
+                    count++;
+                } else {
+                    result.push(count + current);
+                    current = str[i];
+                    count = 1;
+                }
+            }
+
+            result.push(count + current);
+            return result.join(" ");
+        }
+
+        function export_floatplanner_points() {
+
+            if (debug_points.length === 0) {
+                console.log("no points");
+                return;
+            }
+
+            console.log("---- floatplanner points ----");
+
+            debug_points.forEach(marker => {
+                var pos = marker.getLatLng();
+
+                var gx = Math.round(pos.lng);
+                var gy = Math.round(pos.lat);
+
+                console.log(gx + " " + gy);
+            });
+
+            console.log("END");
+        }
+
+
+        function compute_float_string(latlngs) {
+
+            let result = "";
+            let prev_corner = null;
+
+            for (let i = 0; i < latlngs.length - 1; i++) {
+
+                let a = lmap.latLngToContainerPoint(latlngs[i]);
+                let b = lmap.latLngToContainerPoint(latlngs[i + 1]);
+
+                let dist = a.distanceTo(b);
+                let steps = Math.floor(dist / floatplanner_step_pixels);
+                if (steps <= 0) continue;
+
+                for (let s = 0; s <= steps; s++) {
+
+                    let t = s / steps;
+                    let px = a.x + (b.x - a.x) * t;
+                    let py = a.y + (b.y - a.y) * t;
+
+                    let ll = lmap.containerPointToLatLng([px, py]);
+
+                    let corner = [
+                        Math.floor(ll.lng),
+                        Math.floor(ll.lat)
+                    ];
+
+                    if (!prev_corner) {
+                        prev_corner = corner;
+                        continue;
+                    }
+
+                    if (corner[0] === prev_corner[0] && corner[1] === prev_corner[1]) {
+                        continue;
+                    }
+
+                    let dx = corner[0] - prev_corner[0];
+                    let dy = corner[1] - prev_corner[1];
+
+                    if (dy > 0) result += "N";
+                    else if (dy < 0) result += "S";
+                    else if (dx > 0) result += "E";
+                    else if (dx < 0) result += "W";
+
+                    prev_corner = corner;
+                }
+            }
+
+            let formatted = format_direction_string(result);
+            document.getElementById("floatplanner-output").textContent = formatted;
+        }
+
+        document.addEventListener("keydown", function (e) {
+
+            if (e.key === "Escape") {
+                document.getElementById("searchBox").value = "";
+                document.getElementById("resultList").style.display = "none";
+                filter_markers();
+            }
+
+            if (e.key === "d" || e.key === "D") {
+                if (debug_points.length === 0) return;
+                let m = debug_points.pop();
+                floatplanner_layer.removeLayer(m);
+                update_float_line();
+            }
+
+            if (e.key === "e" || e.key === "E") {
+                if (floatplanner_active) {
+                    export_floatplanner_points();
+                }
+            }
+            if (e.key === "m" || e.key === "M") {
+                if (selected_markers.length === 0) return;
+                var group = L.featureGroup(selected_markers);
+                lmap.fitBounds(group.getBounds());
+                var z = lmap.getZoom();
+                lmap.setZoom(z - 1);
+            }
+
+            if (e.key === "x" || e.key === "X") {
+                clear_marker_selection();
+            }
+        });
+
+        document.addEventListener("click", function (e) {
+            var target = e.target;
+            if (!target.classList.contains("js-toggle-select"))
+                return;
+            e.preventDefault();
+            var mid = target.getAttribute("data-marker-id");
+            var marker = all_markers.find(m => m._mid === mid);
+            if (!marker) return;
+            toggle_marker_selection(marker);
+        });
+
+        document.addEventListener("click", function (e) {
+            var target = e.target;
+            if (!target.classList.contains("js-zoom-marker"))
+                return;
+            e.preventDefault();
+            var mid = target.getAttribute("data-marker-id");
+            var marker = all_markers.find(m => m._mid === mid);
+            if (!marker) return;
+            lmap.setView(marker.getLatLng(), 6);
+        });
+
+        /*  Cruise Track Decoder (t64p) 8 chars per waypoint */
+
+        const B64U = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+        function b64u_index(c) {
+            return B64U.indexOf(c);
+        }
+
+        function decode6_from_8(s) {
+            const c0 = b64u_index(s[0]), c1 = b64u_index(s[1]), c2 = b64u_index(s[2]), c3 = b64u_index(s[3]);
+            const c4 = b64u_index(s[4]), c5 = b64u_index(s[5]), c6 = b64u_index(s[6]), c7 = b64u_index(s[7]);
+            if (c0 < 0 || c1 < 0 || c2 < 0 || c3 < 0 || c4 < 0 || c5 < 0 || c6 < 0 || c7 < 0) return null;
+
+            const b0 = (c0 << 2) | (c1 >> 4);
+            const b1 = ((c1 & 15) << 4) | (c2 >> 2);
+            const b2 = ((c2 & 3) << 6) | c3;
+
+            const b3 = (c4 << 2) | (c5 >> 4);
+            const b4 = ((c5 & 15) << 4) | (c6 >> 2);
+            const b5 = ((c6 & 3) << 6) | c7;
+
+            return [b0 & 255, b1 & 255, b2 & 255, b3 & 255, b4 & 255, b5 & 255];
+        }
+
+        function decode_cruise_from_hash() {
+            const h = (location.hash || "").trim();
+            const m = h.match(/^#\/v1\/t64p\/([A-Za-z0-9\-_]+)$/);
+            if (!m) return null;
+
+            const payload = m[1];
+            if (payload.length % 8 !== 0) return null;
+
+            const pts = [];
+
+            for (let i = 0; i < payload.length; i += 8) {
+                const b = decode6_from_8(payload.slice(i, i + 8));
+                if (!b) return null;
+
+                const region_gx = (b[0] << 8) | b[1];
+                const local_x = b[2];
+                const region_gy = (b[3] << 8) | b[4];
+                const local_y = b[5];
+
+                const x = region_gx + (local_x / 256.0);
+                const y = region_gy + (local_y / 256.0);
+
+                pts.push([y, x]);
+            }
+
+            return pts;
+        }
+        /* Position Link (map hash) */
+
+        function update_url_hash() {
+            const h = (location.hash || "").trim();
+            if (h.match(/^#\/v1\/t64p\//)) return;
+            const center = lmap.getCenter();
+            const zoom = lmap.getZoom();
+            const lat = Math.round(center.lat * 100) / 100;
+            const lng = Math.round(center.lng * 100) / 100;
+            history.replaceState(null, "", "#/map/" + zoom + "/" + lat + "/" + lng);
+        }
+
+        function apply_hash_view() {
+            const h = (location.hash || "").trim();
+            const m = h.match(/^#\/map\/(\d+)\/([\d.]+)\/([\d.]+)$/);
+            if (!m) return;
+            lmap.setView([parseFloat(m[2]), parseFloat(m[3])], parseInt(m[1]));
+        }
+
+        const CAP_URL = "https://cap.secondlife.com/cap/0/b713fe80-283b-4585-af4d-a3b7d9a32492";
+        const LS_REGION_KEY = "sl_region_name_cache";
+
+        // Reverse lookup built from region_cache.json: "gridX,gridY" -> "Region Name"
+        var region_reverse = {};
+
+        function load_region_reverse() {
+            fetch("region_cache.json")
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    Object.entries(data).forEach(function([name, pos]) {
+                        region_reverse[pos[0] + "," + pos[1]] = name;
+                    });
+                });
+        }
+
+        function ls_cache_load() {
+            try { return JSON.parse(localStorage.getItem(LS_REGION_KEY) || "{}"); }
+            catch (e) { return {}; }
+        }
+
+        function ls_cache_save(cache) {
+            try { localStorage.setItem(LS_REGION_KEY, JSON.stringify(cache)); }
+            catch (e) {}
+        }
+
+        function resolve_region_name(gridX, gridY) {
+            const key = gridX + "," + gridY;
+
+            // 1. in-memory reverse lookup from region_cache.json
+            if (region_reverse[key] !== undefined) return Promise.resolve(region_reverse[key]);
+
+            // 2. localStorage for API results from previous sessions
+            const ls = ls_cache_load();
+            if (typeof ls[key] === "string") return Promise.resolve(ls[key]);
+
+            // 3. SL Cap API via script tag (JSONP-style)
+            return new Promise(function(resolve) {
+                const url = CAP_URL + "?var=slRegionName&grid_x=" + gridX + "&grid_y=" + gridY;
+                const script = document.createElement("script");
+                script.src = url;
+                script.onload = function() {
+                    const name = (typeof slRegionName === "string") ? slRegionName : "";
+                    region_reverse[key] = name;
+                    const c = ls_cache_load();
+                    c[key] = name;
+                    ls_cache_save(c);
+                    script.remove();
+                    resolve(name);
+                };
+                script.onerror = function() {
+                    script.remove();
+                    resolve("");
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        function set_coord_display_spinner() {
+            const el = document.getElementById("coord-display");
+            el.innerHTML = "";
+            const s = document.createElement("div");
+            s.className = "coord-spinner";
+            el.appendChild(s);
+            el.style.display = "flex";
+        }
+
+        function set_coord_display(text, slurl) {
+            const el = document.getElementById("coord-display");
+            el.innerHTML = "";
+            el.onclick = null;
+            el.classList.remove("has-link");
+            const span = document.createElement("span");
+            span.textContent = text;
+            el.appendChild(span);
+            if (slurl) {
+                el.classList.add("has-link");
+                el.onclick = function() { location.href = slurl; };
+            }
+            el.style.display = "flex";
+        }
+
+        function hide_coord_display() {
+            document.getElementById("coord-display").style.display = "none";
+        }
+
+        function show_click_position(latlng) {
+            const gridX = Math.floor(latlng.lng);
+            const gridY = Math.floor(latlng.lat);
+            const localX = Math.floor((latlng.lng - gridX) * 256);
+            const localY = Math.floor((latlng.lat - gridY) * 256);
+            set_coord_display_spinner();
+            if (click_marker) {
+                click_marker.setLatLng(latlng);
+            } else {
+                click_marker = L.marker(latlng, { icon: click_icon, interactive: false }).addTo(lmap);
+            }
+            const markerEl = click_marker.getElement();
+            if (markerEl) markerEl.classList.remove("void");
+            resolve_region_name(gridX, gridY).then(function(name) {
+                if (name) {
+                    const slurl = "secondlife://" + encodeURIComponent(name) + "/" + localX + "/" + localY;
+                    set_coord_display(name + "  " + localX + "/" + localY, slurl);
+                    const bounds = [[gridY, gridX], [gridY + 1, gridX + 1]];
+                    if (region_rect) {
+                        region_rect.setBounds(bounds);
+                    } else {
+                        region_rect = L.rectangle(bounds, {
+                            color: "rgba(255,255,255,0.7)",
+                            weight: 1,
+                            fill: false,
+                            interactive: false
+                        }).addTo(lmap);
+                    }
+                } else {
+                    hide_coord_display();
+                    const me = click_marker ? click_marker.getElement() : null;
+                    if (me) me.classList.add("void");
+                    if (region_rect) {
+                        lmap.removeLayer(region_rect);
+                        region_rect = null;
+                    }
+                }
+            });
+        }
+
+        function get_marked_coords() {
+            if (!click_marker) return null;
+            const latlng = click_marker.getLatLng();
+            const gridX = Math.floor(latlng.lng);
+            const gridY = Math.floor(latlng.lat);
+            const localX = Math.floor((latlng.lng - gridX) * 256);
+            const localY = Math.floor((latlng.lat - gridY) * 256);
+            return { gridX, gridY, localX, localY, latlng };
+        }
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key !== "c" && e.key !== "C") return;
+            if (e.target.tagName === "INPUT") return;
+            const coords = get_marked_coords();
+            if (!coords) return;
+            const el = document.getElementById("coord-display");
+            const link = el ? el.querySelector("a.slurl-link") : null;
+            const text = link ? link.href : (coords.gridX + "/" + coords.gridY + " " + coords.localX + "/" + coords.localY);
+            navigator.clipboard.writeText(text).catch(function() {});
+        });
+
+        function get_label_offset() {
+            return 0.5;
+            const base_zoom = 2;      // Zoom where 0.5 looks good
+            const base_offset = 0.25;
+            const zoom = lmap.getZoom();
+            // Leaflet / SLMap scales 2x per zoom level
+            const scale = Math.pow(2, base_zoom - zoom);
+            return base_offset * scale + 0.5;
+        }
+
+
+        function draw_cruise_if_present() {
+            const pts = decode_cruise_from_hash();
+            if (!pts || pts.length < 1) return;
+
+            const offsetMeters = 30;
+            const offsetUnits = offsetMeters / 256.0;
+            const occurrence = new Map();
+            const drawPts = [];
+
+            pts.forEach(function (p, index) {
+                const key = Math.round(p[1] * 256) + ":" + Math.round(p[0] * 256);
+                const n = (occurrence.get(key) || 0);
+                occurrence.set(key, n + 1);
+
+                let drawPoint = [p[0], p[1]];
+
+                if (n > 0) {
+                    const prev = pts[index - 1] || p;
+                    const next = pts[index + 1] || p;
+                    const dx = next[1] - prev[1];
+                    const dy = next[0] - prev[0];
+                    const len = Math.sqrt(dx * dx + dy * dy);
+                    if (len > 0) {
+                        const tx = dx / len;
+                        const ty = dy / len;
+                        const lx = -ty;
+                        const ly = tx;
+                        const scale = offsetUnits * n;
+                        drawPoint = [
+                            p[0] + ly * scale,
+                            p[1] + lx * scale
+                        ];
+                    }
+                }
+
+                drawPts.push(drawPoint);
+            });
+
+            const line = L.polyline(drawPts, {
+                color: "#00ffff",
+                weight: 4
+            }).addTo(lmap);
+
+            drawPts.forEach(function (p, index) {
+                const prev = drawPts[index - 1] || p;
+                const next = drawPts[index + 1] || p;
+                const dx = next[1] - prev[1];
+                const dy = next[0] - prev[0];
+                const len = Math.sqrt(dx * dx + dy * dy);
+
+                let nx = 0;
+                let ny = 0;
+
+                if (len > 0) {
+                    nx = -dy / len;
+                    ny = dx / len;
+                }
+
+                const key = Math.round(pts[index][1] * 256) + ":" + Math.round(pts[index][0] * 256);
+                const count = occurrence.get(key) || 1;
+                const labelSide = (count > 1) ? 1 : -1;
+                //const labelOffset = 0.5;
+                const labelOffset = get_label_offset();
+                const labelPoint = [
+                    p[0] + ny * labelOffset * labelSide,
+                    p[1] + nx * labelOffset * labelSide
+                ];
+
+                let radius = 4;
+                let fillColor = "#ffff00";
+                const strokeColor = "#000000";
+
+
+                if (index === 0) {
+                    radius = 7;
+                    fillColor = "#00ff00";
+                } else if (index === drawPts.length - 1) {
+                    radius = 7;
+                    fillColor = "#ff0000";
+                }
+
+                L.circleMarker(p, {
+                    radius: radius,
+                    color: strokeColor,
+                    weight: 1,
+                    fillColor: fillColor,
+                    fillOpacity: 1
+                }).addTo(lmap);
+
+                const numberText = (index + 1 < 10) ? " " + (index + 1) : String(index + 1);
+
+                L.marker(labelPoint, {
+                    icon: L.divIcon({
+                        className: "",
+                        html: "<div style='width:16px;height:16px;border-radius:50%;background:white;border:1px solid black;display:flex;align-items:center;justify-content:center;font-size:9px;color:black;'>" + numberText + "</div>",
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    }),
+                    interactive: false
+                }).addTo(lmap);
+
+            });
+
+            if (drawPts.length > 1) {
+                lmap.fitBounds(line.getBounds());
+            } else {
+                lmap.setView(drawPts[0], 6);
+            }
+        }
+
+
+
+    </script>
+</head>
+
+<body onload="loadmap()">
+
+    <div id="left-panel">
+        <div id="search-container">
+            <input type="text" id="searchBox" placeholder="Search...">
+            <div id="resultList"></div>
+        </div>
+        <div id="jump-container" class="collapsed">
+            <div id="jump-title">
+                <span>Bookmarks</span>
+                <span id="jump-toggle">▴</span>
+            </div>
+            <div id="jumpList"></div>
+        </div>
+    </div>
+    <div id="coord-display"></div>
+    <div id="floatplanner-output"></div>
+    <div id="map-container"></div>
+
+</body>
+
+</html>
