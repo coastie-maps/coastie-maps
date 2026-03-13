@@ -477,7 +477,7 @@
 
         /* Jump Box */
 
-        function load_jump_points(data) {
+        function load_bookmarks(data) {
             set_jump_items(data.map(function (j) {
                 return { name: j.name, latlng: [j.pos[1], j.pos[0]], zoom: j.zoom };
             }));
