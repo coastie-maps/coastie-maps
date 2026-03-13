@@ -524,9 +524,9 @@
             var icon = document.getElementById("jump-toggle");
             box.classList.toggle("collapsed");
             if (box.classList.contains("collapsed")) {
-                icon.textContent = "▴";
-            } else {
                 icon.textContent = "▾";
+            } else {
+                icon.textContent = "▴";
             }
         }
 
@@ -1395,7 +1395,7 @@
         <div id="jump-container" class="collapsed">
             <div id="jump-title">
                 <span>Bookmarks</span>
-                <span id="jump-toggle">▴</span>
+                <span id="jump-toggle">▾</span>
             </div>
             <div id="jumpList"></div>
         </div>
