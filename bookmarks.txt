@@ -1,0 +1,19 @@
+; Jump points
+
+JUMP
+NAME D3 Eden + Fruit Islands
+POS 471 1711
+ZOOM 5
+END
+
+JUMP
+NAME Blackwell Media Center
+POS 780 1278
+ZOOM 8
+END
+
+JUMP
+NAME Mainland
+POS 1095 1016
+ZOOM 2
+END
