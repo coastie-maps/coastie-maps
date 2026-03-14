@@ -1,21 +1,22 @@
-; =========================
-; STATIC ELEMENTS
-; =========================
-
-; ----- Areas -----
-
-AREA
-NAME NOTAM Snug Seas blocked to group
-COLOR #ff0000
-FILL 0.5
-STROKE 1
-WEIGHT 2
-1149 1052
-1149 1051
-1150 1051
-1150 1052
-1149 1052
-END
+; AREA
+; NAME NOTAM Snug Seas blocked to group
+; COLOR #ff0000
+; FILL 0.5
+; STROKE 1
+; WEIGHT 2
+; 1149 1052
+; 1149 1051
+; 1150 1051
+; 1150 1052
+; 1149 1052
+; END
+; 
+; IMAGE
+; FILE images/notams.png
+; NW 1149 1052
+; SE 1150 1051
+; OPACITY 1
+; END
 
 AREA
 NAME No military D3
@@ -198,12 +199,6 @@ END
 
 ; ----- Images -----
 
-IMAGE
-FILE images/notams.png
-NW 1149 1052
-SE 1150 1051
-OPACITY 1
-END
 
 IMAGE
 FILE images/restricted-no-military-vessels-allowed.png

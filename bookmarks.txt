@@ -1,4 +1,5 @@
 ; Jump points
+; A bookmark can have POS+ZOOM (map jump), SEARCH (filter), or both.
 
 JUMP
 NAME D3 Eden + Fruit Islands
@@ -16,4 +17,34 @@ JUMP
 NAME Mainland
 POS 1095 1016
 ZOOM 2
+END
+
+JUMP
+NAME Training Centers
+SEARCH =training
+END
+
+JUMP
+NAME All Stations
+SEARCH =station
+END
+
+JUMP
+NAME All Substations
+SEARCH =substation
+END
+
+JUMP
+NAME Special Ops
+SEARCH =specialops
+END
+
+JUMP
+NAME Polar Ops
+SEARCH =polarops
+END
+
+JUMP
+NAME Miscellanous
+SEARCH =misc
 END

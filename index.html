@@ -19,16 +19,55 @@
             height: 100%;
         }
 
+        #panel-toggle-btn {
+            position: absolute;
+            z-index: 1001;
+            top: 10px;
+            left: 10px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #444;
+            user-select: none;
+        }
+
+        #panel-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.75);
+        }
+
         #left-panel {
             position: absolute;
             z-index: 1000;
-            top: 10px;
-            left: 80px;
+            top: 54px;
+            left: 10px;
             width: 300px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: calc(100% - 20px);
+            gap: 4px;
+            max-height: calc(100% - 64px);
+        }
+
+        #panel-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+            max-height: 2000px;
+            opacity: 1;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+        }
+
+        #left-panel.collapsed #panel-body {
+            max-height: 0;
+            opacity: 0;
         }
 
         #search-container {
@@ -120,6 +159,34 @@
 
 
 
+        .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .leaflet-control-zoom-in,
+        .leaflet-control-zoom-out {
+            width: 28px !important;
+            height: 28px !important;
+            line-height: 26px !important;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.85) !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+            border: none !important;
+            font-size: 18px !important;
+            font-weight: 300 !important;
+            color: #555 !important;
+            display: block !important;
+            margin-bottom: 5px !important;
+            text-align: center !important;
+        }
+
+        .leaflet-control-zoom-in:hover,
+        .leaflet-control-zoom-out:hover {
+            background: white !important;
+            color: #222 !important;
+        }
+
         .leaflet-tooltip {
             position: absolute;
             padding: 4px 8px;
@@ -190,13 +257,11 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
             font-family: sans-serif;
             font-size: 14px;
-            overflow-y: auto;
+            flex-shrink: 0;
         }
-
 
         #jump-title {
             font-weight: bold;
-            margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -304,6 +369,7 @@
         #jumpList {
             max-height: 260px;
             overflow-y: auto;
+            margin-top: 6px;
         }
 
         .jumpItem {
@@ -314,6 +380,12 @@
 
         .jumpItem:hover {
             background: #eee;
+        }
+
+        .jumpItem-search::before {
+            content: "⌕ ";
+            opacity: 0.5;
+            font-size: 12px;
         }
 
         #coord-display {
@@ -440,6 +512,8 @@
         function loadmap() {
             lmap = new SLMap(document.getElementById('map-container'));
             lmap.setView([1012, 1076], 2);
+            if (lmap.zoomControl) lmap.zoomControl.remove();
+            L.control.zoom({ position: 'bottomright' }).addTo(lmap);
             //lmap.setView([1016, 1095], 2);
 
             load_map_data();
@@ -464,7 +538,7 @@
             layer_control = L.control.layers(
                 null,
                 { "Floatplanner": floatplanner_layer },
-                { position: 'topleft' }
+                { position: 'topright' }
             ).addTo(lmap);
             lmap.on('overlayadd', function (e) {
                 if (e.layer === floatplanner_layer) {
@@ -479,6 +553,9 @@
                 }
                 refresh_labels();
             });
+
+            document.getElementById("panel-toggle-btn")
+                .addEventListener("click", toggle_panel);
 
             document.getElementById("jump-title")
                 .addEventListener("click", toggle_jump_container);
@@ -585,7 +662,11 @@
 
         function load_bookmarks(data) {
             set_jump_items(data.map(function (j) {
-                return { name: j.name, latlng: [j.pos[1], j.pos[0]], zoom: j.zoom };
+                var item = { name: j.name };
+                if (j.pos) item.latlng = [j.pos[1], j.pos[0]];
+                if (j.zoom) item.zoom = j.zoom;
+                if (j.search) item.search = j.search;
+                return item;
             }));
         }
 
@@ -601,12 +682,27 @@
                 var div = document.createElement("div");
                 div.className = "jumpItem";
                 div.textContent = it.name;
+                if (it.search) div.classList.add("jumpItem-search");
                 div.onclick = function () {
-                    //lmap.setView(it.latlng, it.zoom || 4);
-                    lmap.flyTo(it.latlng, it.zoom || 4, { duration: 2.5 });
+                    if (it.search) {
+                        var box = document.getElementById("searchBox");
+                        box.value = it.search;
+                        box.dispatchEvent(new Event("input"));
+                    }
+                    if (it.latlng) {
+                        lmap.flyTo(it.latlng, it.zoom || 4, { duration: 2.5 });
+                    }
+                    var container = document.getElementById("jump-container");
+                    var icon = document.getElementById("jump-toggle");
+                    container.classList.add("collapsed");
+                    icon.textContent = "▾";
                 };
                 list.appendChild(div);
             });
+        }
+
+        function toggle_panel() {
+            document.getElementById("left-panel").classList.toggle("collapsed");
         }
 
         function toggle_jump_container() {
@@ -779,22 +875,29 @@
             overlays["Static Labels"] = static_label_layer;
             overlays["Floatplanner"] = floatplanner_layer;
             overlays["Static Images"] = static_image_layer;
-            layer_control = L.control.layers(null, overlays, { position: 'topleft' }).addTo(lmap);
+            layer_control = L.control.layers(null, overlays, { position: 'topright' }).addTo(lmap);
         }
 
         /* search */
 
         function filter_markers() {
 
-            var search = document.getElementById("searchBox").value.toLowerCase().trim();
+            var raw = document.getElementById("searchBox").value.trim();
+            var search = raw.toLowerCase();
             var visible = [];
+            var tag_search = search.startsWith("=");
+            var term = tag_search ? search.slice(1) : search;
 
             all_markers.forEach(marker => {
 
                 var name = (marker.stationData.name || "").toLowerCase();
                 var region = (marker.stationData.region || "").toLowerCase();
+                var tags = marker.stationData.tags || [];
+                var matches = term.length === 0
+                    || (tag_search ? tags.indexOf(term) !== -1
+                                   : (name.includes(term) || region.includes(term)));
 
-                if (search.length === 0 || name.includes(search) || region.includes(search)) {
+                if (matches) {
                     if (!lmap.hasLayer(marker)) marker.addTo(lmap);
                     visible.push(marker);
                 } else {
@@ -805,7 +908,7 @@
             update_result_list(visible);
         }
 
-        function update_result_list(markers) {
+function update_result_list(markers) {
 
             var list = document.getElementById("resultList");
             var search = document.getElementById("searchBox").value.trim();
@@ -1519,7 +1622,9 @@
 
 <body onload="loadmap()">
 
+    <div id="panel-toggle-btn">☰</div>
     <div id="left-panel">
+        <div id="panel-body">
         <div id="search-container">
             <input type="text" id="searchBox" placeholder="Search...">
             <div id="resultList"></div>
@@ -1543,6 +1648,7 @@
                 </div>
                 <div id="goto-result"></div>
             </div>
+        </div>
         </div>
     </div>
     <div id="coord-display"></div>

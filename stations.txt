@@ -4,574 +4,678 @@ STATION
 NAME Station Hikuelo - D1
 SLURL https://maps.secondlife.com/secondlife/Hikuelo/108/234/22
 MARKER station.png
+TAGS station, d1
 END
 
 STATION
 NAME Station Kania - D1
 SLURL https://maps.secondlife.com/secondlife/Kania/37/226/35
 MARKER station.png
+TAGS station, d1
 END
 
 STATION
 NAME Station Abbotts Field - main - D1
 SLURL https://maps.secondlife.com/secondlife/Abbotts/136/120/34
 MARKER station.png
+TAGS station, d1
 END
 
 STATION
 NAME Station Abbotts Field - small boat docks - D1
 SLURL https://maps.secondlife.com/secondlife/Abbotts/40/121/23
 MARKER station.png
+TAGS station, d1
 END
 
 STATION
 NAME Station Abbotts Field - large boat pier - D1
 SLURL https://maps.secondlife.com/secondlife/Abbotts/108/22/21
 MARKER station.png
+TAGS station, d1
 END
 
 STATION
 NAME Substation Bay City - D1
 SLURL https://maps.secondlife.com/secondlife/Bay%20City%20-%20Morton/243/111/25
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Hotei - D1
 SLURL https://maps.secondlife.com/secondlife/Hotei/160/236/23
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Tenjin - D1
 SLURL https://maps.secondlife.com/secondlife/Tenjin/157/212/27
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Gogebic - docks - D1
 SLURL https://maps.secondlife.com/secondlife/Gogebic/199/54/83
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Gogebic - airstrip - D1
 SLURL https://maps.secondlife.com/secondlife/Gogebic/141/229/107
 MARKER air_station.png
+TAGS air, d1
 END
 
 STATION
 NAME Substation and Sail Center Annex Butler - D1
 SLURL https://maps.secondlife.com/secondlife/Butler/21/58/22
 MARKER substation.png
+TAGS substation, d1, sailing
 END
 
 STATION
 NAME Substation Long Meg - D1
 SLURL https://maps.secondlife.com/secondlife/Long%20Meg/158/19/22
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Radar Station Cranberry - main - D1
 SLURL https://maps.secondlife.com/secondlife/Cranberry/181/223/102
 MARKER radar_station.png
+TAGS substation, d1
 END
 
 STATION
 NAME Radar Station Cranberry - docks - D1
 SLURL https://maps.secondlife.com/secondlife/Cranberry/217/213/81
 MARKER radar_station.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Anton - D1
 SLURL https://maps.secondlife.com/secondlife/Anton/147/34/103
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation North Pole - D1
 SLURL https://maps.secondlife.com/secondlife/Virrat/13/132/99
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Shepard’s Point - D1
 SLURL https://maps.secondlife.com/secondlife/Scotopteryx/40/228/22
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Serendipity - D1
 SLURL https://maps.secondlife.com/secondlife/Eggar/200/43/24
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Consular - D1
 SLURL https://maps.secondlife.com/secondlife/Consular/216/51/22
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Crameri - D1
 SLURL https://maps.secondlife.com/secondlife/Crameri/219/192/21
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Substation Promissa - D1
 SLURL https://maps.secondlife.com/secondlife/Promissa/174/201/22
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Air Substation Daybreak - D1
 SLURL https://maps.secondlife.com/secondlife/Lyonet/46/224/106
 MARKER air_station.png
+TAGS substation, air, d1
 END
 
 STATION
 NAME Substation Besma - D1
 SLURL https://maps.secondlife.com/secondlife/Besma/66/79/22
 MARKER substation.png
+TAGS substation, d1
 END
 
 STATION
 NAME Ice Station Amundsen - D1
 SLURL https://maps.secondlife.com/secondlife/Nonantola/149/72/24
-MARKER snow_station.png
+MARKER polarops, specialop_station.png
+TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Mountain Rescue Outpost, D1 S7
 SLURL https://maps.secondlife.com/secondlife/Kendall/234/29/128
-MARKER snow_station.png
+MARKER polarops, specialop_station.png
+TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Supply Depot Bretton, D1 S7
 SLURL https://maps.secondlife.com/secondlife/Bretton/14/126/106
-MARKER snow_station.png
+MARKER polarops, specialop_station.png
+TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Polar Ops HQ, D1 S7
 SLURL https://maps.secondlife.com/secondlife/Bretton/51/53/107
-MARKER snow_station.png
+MARKER polarops, specialop_station.png
+TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Chapel, D1 S8
 SLURL https://maps.secondlife.com/secondlife/Abbotts/164/222/44
 MARKER church_station.png
+TAGS misc, polarops, specialops, d1
 END
 
 STATION
 NAME Polar Ops K-9 Training Center, D1 S7 (road)
 SLURL https://maps.secondlife.com/secondlife/Braggiani/101/205/84
 MARKER k9_station.png
+TAGS training, polarops, d1
 END
 
 STATION
 NAME Polar Ops K-9 Training Center, D1 S7 (docks)
 SLURL https://maps.secondlife.com/secondlife/Braggiani/15/172/21
 MARKER k9_station.png
+TAGS training, polarops, d1
 END
 
 STATION
 NAME Station Sarcee - D2
 SLURL https://maps.secondlife.com/secondlife/Sarcee/239/218/23
 MARKER station.png
+TAGS station, d2
 END
 
 STATION
 NAME Station Promethium - D2
 SLURL https://maps.secondlife.com/secondlife/Promethium/138/55/25
 MARKER station.png
+TAGS station, d2
 END
 
 STATION
 NAME Station Promethium Hangar @ Port Scandium Airport - D2
 SLURL https://maps.secondlife.com/secondlife/Promethium/143/69/181
 MARKER air_station.png
+TAGS air, d2
 END
 
 STATION
 NAME Promethium South end of airstrip, 66 ASML - D2
 SLURL https://maps.secondlife.com/secondlife/Promethium/88/97/86
 MARKER air_station.png
+TAGS air, d2
 END
 
 STATION
 NAME Air Substation Exxilon - D2
 SLURL https://maps.secondlife.com/secondlife/Exxilon/132/235/43
 MARKER air_station.png
+TAGS air, substation, d2
 END
 
 STATION
 NAME Air Substation Monowai - D2
 SLURL https://maps.secondlife.com/secondlife/Monowai/173/83/79
 MARKER air_station.png
+TAGS air, substation, d2
 END
 
 STATION
 NAME Substation Kang Nae - D2
 SLURL https://maps.secondlife.com/secondlife/Kang%20Nae/58/224/22
 MARKER substation.png
+TAGS substation, d2
 END
 
 STATION
 NAME Substation & Diver Center Solha - D2
 SLURL https://maps.secondlife.com/secondlife/Solha/99/211/22
 MARKER dive_station.png
+TAGS training, d2
 END
 
 STATION
 NAME Substation Ahnpyung - D2
 SLURL https://maps.secondlife.com/secondlife/Ahnpyung/2/126/22
 MARKER substation.png
+TAGS substation, d2
 END
 
 STATION
 NAME Substation Yeosol - D2
 SLURL https://maps.secondlife.com/secondlife/Yeosol/146/243/22
 MARKER substation.png
+TAGS substation, d2
 END
 
 STATION
 NAME Sail Center Annex Jingi - D2
 SLURL https://maps.secondlife.com/secondlife/Jingi/73/218/22
 MARKER sail_station.png
+TAGS substation, d2
 END
 
 STATION
 NAME Station Munro & Noumea Airport - D2
 SLURL https://maps.secondlife.com/secondlife/Saddlemead/124/9/23
 MARKER air_station.png
+TAGS air, specialops, d2
 END
 
 STATION
 NAME Station Munro Cemetary - D2
 SLURL https://maps.secondlife.com/secondlife/Saddlemead/111/36/702
 MARKER church_station.png
+TAGS specialops, d2
 END
 
 STATION
 NAME Station Byron Bay - D3
 SLURL https://maps.secondlife.com/secondlife/Svitjod/219/69/23
 MARKER station.png
+TAGS station, d3
 END
 
 STATION
 NAME Station Danshire - D3
 SLURL https://maps.secondlife.com/secondlife/Venrigalli/106/52/22
 MARKER station.png
+TAGS station, d3
 END
 
 STATION
 NAME Station New Horizons - D3
 SLURL https://maps.secondlife.com/secondlife/Alphubel/128/141/23
 MARKER station.png
+TAGS station, d3
 END
 
 STATION
 NAME Station Santa Catalina - D3
 SLURL https://maps.secondlife.com/secondlife/Hollywood/239/35/22
 MARKER station.png
+TAGS station, d3
 END
 
 STATION
 NAME Substation Qlar Fell - D3
 SLURL https://maps.secondlife.com/secondlife/Qlar%20Fell/158/218/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Quagmire - D3
 SLURL https://maps.secondlife.com/secondlife/Quagmire/105/168/23
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Agrippa - D3
 SLURL https://maps.secondlife.com/secondlife/Agrippa/219/242/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Vorlheim - D3
 SLURL https://maps.secondlife.com/secondlife/Vorlheim/241/9/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Remora - D3
 SLURL https://maps.secondlife.com/secondlife/Remora/88/228/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Starfish - Main/Airport ramp - D3
 SLURL https://maps.secondlife.com/secondlife/Hardrada/158/156/43
 MARKER air_station.png
+TAGS air, substation, d3
 END
 
 STATION
 NAME Substation Starfish - Lake Docks - D3
 SLURL https://maps.secondlife.com/secondlife/Hardrada/38/44/23
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Starfish - East Docks - D3
 SLURL https://maps.secondlife.com/secondlife/Hardrada/158/33/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Sailstice - D3
 SLURL https://maps.secondlife.com/secondlife/Erik/174/41/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Kuna - D3
 SLURL https://maps.secondlife.com/secondlife/Chomo/209/2/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Kuna enter harbor here - D3
 SLURL https://maps.secondlife.com/secondlife/Kunapipi/114/5/25
 MARKER misc_station.png
+TAGS d3
 END
 
 STATION
 NAME Substation Imelza - D3
 SLURL https://maps.secondlife.com/secondlife/Imelza/224/21/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Egle - D3
 SLURL https://maps.secondlife.com/secondlife/Egle/185/48/22
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Substation Sialimonus - D3
 SLURL https://maps.secondlife.com/secondlife/Sialimonus/42/83/24
 MARKER substation.png
+TAGS substation, d3
 END
 
 STATION
 NAME Air Station Acknefar - D3
 SLURL https://maps.secondlife.com/secondlife/Acknefar/185/128/24
 MARKER air_station.png
+TAGS air, specialops, d3
 END
 
 STATION
 NAME Station Discovery - D4
 SLURL https://maps.secondlife.com/secondlife/Artsebarsky/29/196/23
 MARKER station.png
+TAGS station, d4
 END
 
 STATION
 NAME Station Mignon - D4
 SLURL https://maps.secondlife.com/secondlife/Tigger/90/191/22
 MARKER station.png
+TAGS station, d4
 END
 
 STATION
 NAME Station Terranova - D4
 SLURL https://maps.secondlife.com/secondlife/Norstrilia/26/237/22
 MARKER station.png
+TAGS station, d4
 END
 
 STATION
 NAME Substation Kolbeinsey - D4
 SLURL https://maps.secondlife.com/secondlife/Kolbeinsey/165/99/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Clearbrook - D4
 SLURL https://maps.secondlife.com/secondlife/Clearbrook/164/139/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Aydat - D4
 SLURL https://maps.secondlife.com/secondlife/Aydat/17/230/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Mordicub - D4
 SLURL https://maps.secondlife.com/secondlife/Mordicub/224/76/21
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Hyralios - D4
 SLURL https://maps.secondlife.com/secondlife/Hyralios/55/239/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Slice - D4
 SLURL https://maps.secondlife.com/secondlife/Danshire/157/65/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Sheershank - D4
 SLURL https://maps.secondlife.com/secondlife/Sheershank/204/234/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Sorbet - D4
 SLURL https://maps.secondlife.com/secondlife/Sorbet/209/19/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation DanCan - D4
 SLURL https://maps.secondlife.com/secondlife/Apple%20Island/13/251/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Jennilee - D4
 SLURL https://maps.secondlife.com/secondlife/Jennilee/53/175/22
 MARKER substation.png
+TAGS substation, d4
 END
 
 STATION
 NAME Substation Pilatus - D4
 SLURL https://maps.secondlife.com/secondlife/Pilatus/141/230/23
 MARKER substation.png
-END
-
-STATION
-NAME Acknefar
-SLURL https://maps.secondlife.com/secondlife/Acknefar/185/128/24
-MARKER air_station.png
+TAGS substation, d4
 END
 
 STATION
 NAME FSC Flight Safety
 SLURL https://maps.secondlife.com/secondlife/Rossa/131/248/21
 MARKER air_station.png
+TAGS training
 END
 
 STATION
 NAME ATC Aircraft Training
 SLURL https://maps.secondlife.com/secondlife/Acknefar/153/22/24
 MARKER air_station.png
+TAGS air, training
 END
 
 STATION
 NAME STC Sail Training
 SLURL https://maps.secondlife.com/secondlife/Venrigalli/143/28/22
 MARKER sail_station.png
+TAGS sail, training
 END
 
 STATION
 NAME BTC Boat Training & Museum
 SLURL https://maps.secondlife.com/secondlife/Egle/162/110/25
 MARKER misc_station.png
+TAGS training
 END
 
 STATION
 NAME DTC Dive Training
 SLURL https://maps.secondlife.com/secondlife/Miller/207/189/82
 MARKER dive_station.png
+TAGS training
 END
 
 STATION
 NAME Institute of Leadership
 SLURL https://maps.secondlife.com/secondlife/Alphubel/89/132/4002
 MARKER ifl_station.png
+TAGS training
 END
 
 STATION
 NAME MTC Medical Training
 SLURL https://maps.secondlife.com/secondlife/Acknefar/156/54/24
 MARKER misc_station.png
+TAGS training
 END
 
 STATION
 NAME LQP1 and Sea Deployment
 SLURL https://maps.secondlife.com/secondlife/Acknefar/214/31/31
 MARKER misc_station.png
+TAGS training
 END
 
 STATION
 NAME RTC Recruit Training
 SLURL https://maps.secondlife.com/secondlife/Farcastle/151/167/22
 MARKER graduation_station.png
+TAGS training
 END
 
 STATION
-NAME Search and Rescue
+NAME Search and Rescue Training Center
 SLURL https://maps.secondlife.com/secondlife/Acknefar/41/56/24
 MARKER misc_station.png
+TAGS training
 END
 
 STATION
 NAME Honor Guard
 SLURL https://maps.secondlife.com/secondlife/Monowai/103/95/79
 MARKER misc_station.png
+TAGS training
 END
 
 STATION
 NAME Headquarters
 SLURL https://maps.secondlife.com/secondlife/Alphubel/128/34/26
 MARKER hq_station.png
+TAGS misc
 END
 
 STATION
 NAME Blackwell Media
 SLURL https://maps.secondlife.com/secondlife/The%20Kingdom/99/86/1254
 MARKER misc_station.png
+TAGS misc
 END
 
 STATION
 NAME Graduation Plank FRC
 SLURL https://maps.secondlife.com/secondlife/Alphubel/83/183/23
 MARKER graduation_station.png
+TAGS misc
 END
+
+STATION
+NAME Rec Center
+SLURL http://maps.secondlife.com/secondlife/The%20Kingdom/87/91/2741
+MARKER misc_station.png
+TAGS misc
+END
+
 
 STATION
 NAME Active Retired
 SLURL https://maps.secondlife.com/secondlife/Tenjin/157/194/28
 MARKER misc_station.png
+TAGS misc
 END
 
 STATION
 NAME Aircraft Maintanance
 SLURL https://maps.secondlife.com/secondlife/Acknefar/212/36/24
 MARKER air_station.png
+TAGS misc
 END
 
 STATION
 NAME Barracks Egle
 SLURL https://maps.secondlife.com/secondlife/Egle/197/153/22
 MARKER misc_station.png
+TAGS misc
 END
 
 STATION
 NAME Toasted Coastie Miller
 SLURL https://maps.secondlife.com/secondlife/Miller/147/148/83
 MARKER misc_station.png
+TAGS misc
 END
 
 STATION
 NAME Radio Station
 SLURL https://maps.secondlife.com/secondlife/Abbotts/50/137/33
 MARKER misc_station.png
+TAGS misc
+END
+
+STATION
+NAME Yoga for Coasties Zen Garden
+SLURL http://maps.secondlife.com/secondlife/Farcastle/191/198/25
+MARKER misc_station.png
+TAGS misc
 END
