@@ -44,11 +44,21 @@
 
         #searchBox {
             width: 100%;
-            padding: 4px;
+            padding: 4px 6px;
             margin-bottom: 6px;
             box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.55);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 4px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        #searchBox:focus {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 100, 200, 0.2);
         }
 
         #resultList {
@@ -199,6 +209,79 @@
 
         #jump-container.collapsed #jumpList {
             display: none;
+        }
+
+        #goto-container {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(4px);
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        #goto-title {
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #goto-toggle {
+            font-size: 14px;
+        }
+
+        #goto-container.collapsed #goto-body {
+            display: none;
+        }
+
+        #goto-body {
+            margin-top: 6px;
+        }
+
+        #goto-input-row {
+            display: flex;
+            gap: 4px;
+        }
+
+        #gotoBox {
+            flex: 1;
+            padding: 4px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.55);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        #gotoBox:focus {
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(0, 100, 200, 0.2);
+        }
+
+        #goto-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: none;
+            background: rgba(0,0,0,0.15);
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        #goto-btn:hover {
+            background: rgba(0,0,0,0.25);
+        }
+
+        #goto-result {
+            font-size: 12px;
+            margin-top: 5px;
+            color: rgba(0,0,0,0.6);
+            min-height: 16px;
         }
 
         #beta-notice {
@@ -400,6 +483,13 @@
             document.getElementById("jump-title")
                 .addEventListener("click", toggle_jump_container);
 
+            document.getElementById("goto-title")
+                .addEventListener("click", toggle_goto_container);
+            document.getElementById("goto-btn")
+                .addEventListener("click", goto_region);
+            document.getElementById("gotoBox")
+                .addEventListener("keydown", function(e) { if (e.key === "Enter") goto_region(); });
+
             lmap.on("moveend", update_url_hash);
 
             load_region_reverse();
@@ -528,6 +618,48 @@
             } else {
                 icon.textContent = "▴";
             }
+        }
+
+        const GOTO_URL = "https://cap.secondlife.com/cap/0/d661249b-2b5a-4436-966a-3d3b8d7a574f";
+
+        function toggle_goto_container() {
+            var box = document.getElementById("goto-container");
+            var icon = document.getElementById("goto-toggle");
+            box.classList.toggle("collapsed");
+            if (box.classList.contains("collapsed")) {
+                icon.textContent = "▾";
+            } else {
+                icon.textContent = "▴";
+            }
+        }
+
+        function goto_region() {
+            var name = document.getElementById("gotoBox").value.trim();
+            if (!name) return;
+            var result = document.getElementById("goto-result");
+            result.textContent = "…";
+            var url = GOTO_URL + "?var=slGotoCoords&sim_name=" + encodeURIComponent(name);
+            var script = document.createElement("script");
+            script.src = url;
+            script.onload = function() {
+                script.remove();
+                if (typeof slGotoCoords === "object" && slGotoCoords &&
+                        typeof slGotoCoords.x === "number") {
+                    var gx = slGotoCoords.x, gy = slGotoCoords.y;
+                    region_reverse[gx + "," + gy] = name;
+                    var center = { lat: gy + 0.5, lng: gx + 0.5 };
+                    lmap.flyTo([center.lat, center.lng], 6, { duration: 2.0 });
+                    show_click_position(center);
+                    result.textContent = "↗ " + name;
+                } else {
+                    result.textContent = "Region not found";
+                }
+            };
+            script.onerror = function() {
+                script.remove();
+                result.textContent = "Error";
+            };
+            document.head.appendChild(script);
         }
 
         function update_label_scale() {
@@ -1398,6 +1530,19 @@
                 <span id="jump-toggle">▾</span>
             </div>
             <div id="jumpList"></div>
+        </div>
+        <div id="goto-container" class="collapsed">
+            <div id="goto-title">
+                <span>Go to Region</span>
+                <span id="goto-toggle">▾</span>
+            </div>
+            <div id="goto-body">
+                <div id="goto-input-row">
+                    <input type="text" id="gotoBox" placeholder="Region name…">
+                    <button id="goto-btn">→</button>
+                </div>
+                <div id="goto-result"></div>
+            </div>
         </div>
     </div>
     <div id="coord-display"></div>
