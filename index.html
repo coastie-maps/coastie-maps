@@ -514,6 +514,8 @@
             lmap.setView([1012, 1076], 2);
             if (lmap.zoomControl) lmap.zoomControl.remove();
             L.control.zoom({ position: 'bottomright' }).addTo(lmap);
+            lmap.createPane('imageOverlayPane');
+            lmap.getPane('imageOverlayPane').style.zIndex = 450;
             //lmap.setView([1016, 1095], 2);
 
             load_map_data();
@@ -522,8 +524,8 @@
                 if (layer.bringToBack) layer.bringToBack();
             });
             */
-            static_image_layer.addTo(lmap);
             static_area_layer.addTo(lmap);
+            static_image_layer.addTo(lmap);
             static_label_layer.addTo(lmap);
             lmap.on("click", function (e) {
                 if (floatplanner_active) {
@@ -857,7 +859,7 @@
                 images.forEach(function (img) {
                     var b = img.bounds;
                     var leaflet_bounds = [[b[1], b[0]], [b[3], b[2]]];
-                    var overlay = L.imageOverlay(img.file, leaflet_bounds, { opacity: img.opacity || 1 });
+                    var overlay = L.imageOverlay(img.file, leaflet_bounds, { opacity: img.opacity || 1, pane: 'imageOverlayPane' });
                     static_image_layer.addLayer(overlay);
                 });
             }
