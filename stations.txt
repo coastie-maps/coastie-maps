@@ -164,28 +164,28 @@ END
 STATION
 NAME Ice Station Amundsen - D1
 SLURL https://maps.secondlife.com/secondlife/Nonantola/149/72/24
-MARKER polarops, specialop_station.png
+MARKER snow_station.png
 TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Mountain Rescue Outpost, D1 S7
 SLURL https://maps.secondlife.com/secondlife/Kendall/234/29/128
-MARKER polarops, specialop_station.png
+MARKER snow_station.png
 TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Supply Depot Bretton, D1 S7
 SLURL https://maps.secondlife.com/secondlife/Bretton/14/126/106
-MARKER polarops, specialop_station.png
+MARKER snow_station.png
 TAGS polarops, specialops, d1
 END
 
 STATION
 NAME Polar Ops HQ, D1 S7
 SLURL https://maps.secondlife.com/secondlife/Bretton/51/53/107
-MARKER polarops, specialop_station.png
+MARKER snow_station.png
 TAGS polarops, specialops, d1
 END
 
